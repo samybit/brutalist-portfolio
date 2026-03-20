@@ -153,7 +153,7 @@ export default function App() {
                       ))}
                     </div>
                   </CardContent>
-                  <CardFooter className="p-6 pt-0">
+                  <CardFooter className="p-6 pt-6 mt-auto">
                     <a href={project.link} className="font-sans font-bold uppercase text-sm underline decoration-4 underline-offset-4 hover:text-mainBrand transition-colors">
                       View Project &rarr;
                     </a>
