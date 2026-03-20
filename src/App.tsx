@@ -115,7 +115,10 @@ export default function App() {
         {/* Selected Work Section */}
         <section id="work" className="mb-32">
           <div className="flex items-center gap-6 mb-12">
-            <h3 className="text-5xl font-heading font-black uppercase tracking-tight">Selected Work</h3>
+            <div className="h-2 w-12 bg-foreground"></div>
+            <h3 className="text-5xl font-heading font-black uppercase tracking-tight">
+              Selected Work
+            </h3>
             <div className="h-2 flex-grow bg-foreground"></div>
           </div>
 
@@ -165,14 +168,16 @@ export default function App() {
         <section id="contact" className="mb-32">
           <div className="flex items-center gap-6 mb-12">
             <div className="h-2 w-12 bg-foreground"></div>
-            <h3 className="text-5xl font-heading font-black uppercase tracking-tight">Initiate Contact</h3>
+            <h3 className="text-5xl font-heading font-black uppercase tracking-tight">
+              Initiate Contact
+            </h3>
             <div className="h-2 flex-grow bg-foreground"></div>
           </div>
 
           <div className="flex gap-4 mb-8 font-sans font-bold uppercase underline decoration-4 underline-offset-4 text-lg">
-            <a href="https://upwork.com/freelancers/YOUR_PROFILE" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">Upwork</a>
-            <a href="https://khamsat.com/user/YOUR_PROFILE" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">Khamsat</a>
-            <a href="https://mostaql.com/u/YOUR_PROFILE" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">Mostaql</a>
+            <a href="https://www.upwork.com/freelancers/~01bcf00bfe590a5331" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">Upwork</a>
+            <a href="https://khamsat.com/user/samy-b" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">Khamsat</a>
+            <a href="https://mostaql.com/u/Samy_01" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">Mostaql</a>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
