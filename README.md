@@ -1,73 +1,34 @@
-# React + TypeScript + Vite
+# SAMY.DEV // PORTFOLIO
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> **Design Without Apology.** > A high-contrast, brutalist frontend portfolio built to showcase engineering precision and stark typography.
 
-Currently, two official plugins are available:
+![Build Status](https://img.shields.io/github/actions/workflow/status/YOUR_USERNAME/samy-dev/deploy.yml?branch=main&style=for-the-badge&color=FF3366)
+![Tech Stack](https://img.shields.io/badge/Stack-React%20%7C%20Tailwind%20%7C%20shadcn-black?style=for-the-badge)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ⚡ Architecture & Stack
 
-## React Compiler
+This interface rejects soft shadows and rounded corners in favor of absolute grid alignment, 8px borders, and pure `#000` / `#FFF` contrasts with a primary brand accent. 
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Framework:** React 18 + Vite
+- **Styling:** Tailwind CSS v3
+- **Components:** Radix UI + shadcn/ui (Lyra Preset)
+- **Animation:** Framer Motion (Minimalist easing)
+- **Form Handling:** Web3Forms API
+- **Deployment:** GitHub Pages (Automated via Actions CI/CD)
 
-## Expanding the ESLint configuration
+## ⚙️ Local Development
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Clone the transmission and run it locally.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+```bash
+# 1. Clone the repository
+git clone [https://github.com/YOUR_USERNAME/samy-dev.git](https://github.com/YOUR_USERNAME/samy-dev.git)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+# 2. Enter the directory
+cd samy-dev
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+# 3. Install dependencies
+npm install
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+# 4. Start the Vite development server
+npm run dev
