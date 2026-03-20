@@ -91,8 +91,8 @@ export default function App() {
           </p>
 
           <div className="flex gap-4">
-            <Button size="lg" className="h-16 px-10 text-xl font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-mainBrand">
-              LET'S TALK
+            <Button asChild size="lg" className="h-16 px-10 text-xl font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-bgBrand hover:text-mainBrand cursor-pointer">
+              <a href="#contact">LET'S TALK</a>
             </Button>
           </div>
         </motion.div>
