@@ -3,51 +3,37 @@ import { Button } from "@/components/ui/button";
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-bgBrand text-foreground p-6 md:p-12 selection:bg-mainBrand selection:text-white">
-      {/* Navigation */}
-      <nav className="flex justify-between items-center border-b-4 border-foreground pb-4 mb-16">
-        <div className="text-2xl font-heading font-black tracking-tighter uppercase">
-          Samy.Dev
-        </div>
-        <Button
-          variant="outline"
-          className="font-sans font-bold border-2 border-foreground shadow-brutal-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
-        >
-          Available for Work
-        </Button>
-      </nav>
+    <div className="min-h-screen bg-bgBrand text-foreground p-8 selection:bg-mainBrand selection:text-white">
+      {/* Brutalist Header */}
+      <header className="flex justify-between items-end border-b-8 border-foreground pb-6 mb-20">
+        <h1 className="text-4xl font-heading font-black uppercase leading-none tracking-tighter">
+          Samy<span className="text-mainBrand">.</span>Dev
+        </h1>
+        <nav className="space-x-8 font-sans font-bold uppercase text-sm hidden md:block">
+          <a href="#" className="hover:text-mainBrand underline decoration-4 underline-offset-4">Work</a>
+          <a href="#" className="hover:text-mainBrand underline decoration-4 underline-offset-4">Process</a>
+          <a href="#" className="hover:text-mainBrand underline decoration-4 underline-offset-4">Contact</a>
+        </nav>
+      </header>
 
-      {/* Hero Section */}
-      <main className="max-w-5xl mx-auto mt-20 md:mt-32">
+      {/* Hero Content */}
+      <main className="max-w-6xl">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} // Minimalist, crisp easing
-          className="space-y-8"
+          initial={{ x: -50, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-heading font-black uppercase leading-[0.85] tracking-tight">
-            Building <br />
-            <span className="text-mainBrand">Digital</span> <br />
-            Experiences.
-          </h1>
+          <h2 className="text-7xl md:text-9xl font-heading font-black uppercase leading-[0.8] mb-10">
+            Design <br /> Without <br /> <span className="italic text-mainBrand">Apology.</span>
+          </h2>
 
-          <p className="text-xl md:text-2xl font-sans max-w-2xl font-medium leading-relaxed pt-4">
-            A showcase of sharp edges, heavy contrast, and uncompromising performance.
+          <p className="font-sans text-xl md:text-2xl max-w-xl font-bold mb-12 leading-tight">
+            A MERN stack developer building interfaces that demand attention through heavy borders and sharp typography.
           </p>
 
-          <div className="flex flex-wrap gap-6 pt-8">
-            <Button
-              size="lg"
-              className="text-lg font-bold border-4 border-foreground shadow-brutal hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all bg-mainBrand text-white hover:bg-mainBrand"
-            >
-              View Projects
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="text-lg font-bold border-4 border-foreground shadow-brutal hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all bg-bgBrand"
-            >
-              Contact Me
+          <div className="flex gap-4">
+            <Button size="lg" className="h-16 px-10 text-xl font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all">
+              LET'S TALK
             </Button>
           </div>
         </motion.div>
