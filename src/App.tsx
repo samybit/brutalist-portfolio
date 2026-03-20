@@ -64,13 +64,13 @@ export default function App() {
   return (
     <div className="min-h-screen bg-bgBrand text-foreground p-8 selection:bg-mainBrand selection:text-white">
       {/* Brutalist Header */}
-      <header className="flex justify-between items-end border-b-8 border-foreground pb-6 mb-20">
-        <h1 className="text-4xl font-heading font-black uppercase leading-none tracking-tighter">
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b-8 border-foreground pb-6 mb-12 md:mb-20 gap-6 sm:gap-0">
+        <h1 className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter">
           Samy<span className="text-mainBrand">.</span>Dev
         </h1>
-        <nav className="space-x-8 font-sans font-bold uppercase text-sm hidden md:block">
-          <a href="#work" className="hover:text-mainBrand underline decoration-4 underline-offset-4">Work</a>
-          <a href="#contact" className="hover:text-mainBrand underline decoration-4 underline-offset-4">Contact</a>
+        <nav className="flex gap-6 font-sans font-bold uppercase text-base w-full sm:w-auto border-t-4 border-foreground pt-4 sm:border-none sm:pt-0">
+          <a href="#work" className="hover:text-mainBrand underline decoration-4 underline-offset-4 transition-colors">Work</a>
+          <a href="#contact" className="hover:text-mainBrand underline decoration-4 underline-offset-4 transition-colors">Contact</a>
         </nav>
       </header>
 
