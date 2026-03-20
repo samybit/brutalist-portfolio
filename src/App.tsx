@@ -82,7 +82,7 @@ export default function App() {
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="mb-32"
         >
-          <h2 className="text-7xl md:text-9xl font-heading font-black uppercase leading-[0.8] mb-10">
+          <h2 className="text-5xl sm:text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-8 md:mb-10 break-words">
             Design <br /> Without <br /> <span className="italic text-mainBrand">Apology.</span>
           </h2>
 
