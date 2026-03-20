@@ -8,22 +8,22 @@ import { Label } from "@/components/ui/label";
 
 const projects = [
   {
-    title: "Orbital: 3D Solar System",
+    title: "3D Solar System Simulator",
     description: "An interactive, physics-driven planetary simulator rendered directly in the browser.",
     tech: ["MERN Stack", "Three.js", "React"],
-    link: "#"
+    link: "https://github.com/samybit/solar-orbital-engine"
   },
   {
     title: "Terminal Ledger",
-    description: "A lightning-fast, command-line personal finance manager and expense tracker.",
-    tech: ["C", "CLI", "Make"],
-    link: "#"
+    description: "A lightning-fast, command-line personal finance manager and expense tracker built for speed.",
+    tech: ["C", "CLI", "Linux"],
+    link: "https://github.com/samybit/cli-expense-tracker"
   },
   {
-    title: "Storefront.js",
-    description: "A raw, dependency-free e-commerce experience built entirely from scratch.",
-    tech: ["Vanilla JS", "DOM API", "CSS3"],
-    link: "#"
+    title: "Vanilla Storefront",
+    description: "A raw, dependency-free e-commerce experience built entirely from scratch without frameworks.",
+    tech: ["Vanilla JS", "DOM API", "CSS"],
+    link: "https://github.com/samybit/vanilla-js-ecommerce"
   }
 ];
 
@@ -43,7 +43,7 @@ export default function App() {
 
       <main className="max-w-6xl mx-auto">
         {/* Hero Content */}
-        <motion.div 
+        <motion.div
           initial={{ x: -50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
@@ -52,7 +52,7 @@ export default function App() {
           <h2 className="text-7xl md:text-9xl font-heading font-black uppercase leading-[0.8] mb-10">
             Design <br /> Without <br /> <span className="italic text-mainBrand">Apology.</span>
           </h2>
-          
+
           <p className="font-sans text-xl md:text-2xl max-w-xl font-bold mb-12 leading-tight">
             A developer building interfaces that demand attention through heavy borders and sharp typography.
           </p>
@@ -92,9 +92,9 @@ export default function App() {
                     </CardDescription>
                     <div className="flex flex-wrap gap-2">
                       {project.tech.map((tech, i) => (
-                        <Badge 
-                          key={i} 
-                          variant="outline" 
+                        <Badge
+                          key={i}
+                          variant="outline"
                           className="rounded-none border-2 border-foreground font-sans font-bold uppercase text-xs px-3 py-1"
                         >
                           {tech}
@@ -121,19 +121,25 @@ export default function App() {
             <div className="h-2 flex-grow bg-foreground"></div>
           </div>
 
+          <div className="flex gap-4 mb-8 font-sans font-bold uppercase underline decoration-4 underline-offset-4 text-lg">
+            <a href="https://upwork.com/freelancers/YOUR_PROFILE" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">Upwork</a>
+            <a href="https://khamsat.com/user/YOUR_PROFILE" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">Khamsat</a>
+            <a href="https://mostaql.com/u/YOUR_PROFILE" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">Mostaql</a>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
               <h4 className="text-5xl md:text-7xl font-heading font-black uppercase mb-8 leading-[0.85]">
-                Got a <br/> <span className="text-mainBrand">Project</span> <br/> in mind?
+                Got a <br /> <span className="text-mainBrand">Project</span> <br /> in mind
               </h4>
               <p className="font-sans text-2xl font-bold mb-8 max-w-md leading-tight">
                 I'm actively taking on new freelance clients and open to full-time roles. Drop a transmission below.
               </p>
-              
+
               <div className="space-y-4 font-sans font-black uppercase text-xl mt-12">
                 <div className="flex items-center gap-4">
                   <div className="w-6 h-6 bg-mainBrand border-4 border-foreground"></div>
@@ -146,7 +152,7 @@ export default function App() {
               </div>
             </motion.div>
 
-            <motion.form 
+            <motion.form
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -155,33 +161,33 @@ export default function App() {
             >
               <div className="space-y-3">
                 <Label htmlFor="name" className="font-sans font-black uppercase text-xl">Name</Label>
-                <Input 
-                  id="name" 
-                  placeholder="JOHN DOE" 
-                  className="rounded-none border-4 border-foreground h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:border-mainBrand focus-visible:bg-accent/10 bg-bgBrand transition-colors" 
+                <Input
+                  id="name"
+                  placeholder="JOHN DOE"
+                  className="rounded-none border-4 border-foreground h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:border-mainBrand focus-visible:bg-accent/10 bg-bgBrand transition-colors"
                 />
               </div>
-              
+
               <div className="space-y-3">
                 <Label htmlFor="email" className="font-sans font-black uppercase text-xl">Email</Label>
-                <Input 
-                  id="email" 
-                  type="email" 
-                  placeholder="JOHN@DOE.COM" 
-                  className="rounded-none border-4 border-foreground h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:border-mainBrand focus-visible:bg-accent/10 bg-bgBrand transition-colors" 
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="JOHN@DOE.COM"
+                  className="rounded-none border-4 border-foreground h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:border-mainBrand focus-visible:bg-accent/10 bg-bgBrand transition-colors"
                 />
               </div>
-              
+
               <div className="space-y-3">
                 <Label htmlFor="message" className="font-sans font-black uppercase text-xl">Message</Label>
-                <Textarea 
-                  id="message" 
-                  placeholder="TELL ME ABOUT YOUR PROJECT..." 
-                  className="rounded-none border-4 border-foreground min-h-[200px] text-xl font-bold font-sans focus-visible:ring-0 focus-visible:border-mainBrand focus-visible:bg-accent/10 bg-bgBrand resize-none transition-colors p-4" 
+                <Textarea
+                  id="message"
+                  placeholder="TELL ME ABOUT YOUR PROJECT..."
+                  className="rounded-none border-4 border-foreground min-h-[200px] text-xl font-bold font-sans focus-visible:ring-0 focus-visible:border-mainBrand focus-visible:bg-accent/10 bg-bgBrand resize-none transition-colors p-4"
                 />
               </div>
-              
-              <Button type="submit" size="lg" className="w-full h-20 mt-6 text-2xl font-black rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-foreground">
+
+              <Button type="submit" size="lg" className="w-full h-20 mt-6 text-2xl font-black rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-bgBrand hover:text-mainBrand">
                 SEND TRANSMISSION
               </Button>
             </motion.form>
