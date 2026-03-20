@@ -12,7 +12,7 @@ module.exports = {
       // 1. Brutalist Font Stacks
       fontFamily: {
         heading: ['Empirica', 'Constantia', '"Lucida Bright"', 'Georgia', 'serif'],
-        sans: ['Mallory', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+        sans: ['Kafyelo', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
       },
       // 2. Brutalist Hard-Edge Shadows
       boxShadow: {

@@ -12,8 +12,8 @@
 }
 
 @font-face {
-  font-family: 'Mallory';
-  src: url('./assets/fonts/Mallory.otf') format('opentype');
+  font-family: 'Kafyelo';
+  src: url('./assets/fonts/Kafyelo.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -96,7 +96,7 @@
 
   body {
     @apply bg-background text-foreground font-sans;
-    /* Mallory as default body text */
+    /* Kafyelo as default body text */
   }
 
   h1,
