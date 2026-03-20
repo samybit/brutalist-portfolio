@@ -90,9 +90,24 @@ export default function App() {
             A developer building interfaces that demand attention through heavy borders and sharp typography.
           </p>
 
-          <div className="flex gap-4">
-            <Button asChild size="lg" className="h-16 px-10 text-xl font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-bgBrand hover:text-mainBrand cursor-pointer">
+          <div className="flex flex-wrap gap-4">
+            <Button
+              asChild
+              size="lg"
+              className="text-lg font-bold border-4 border-foreground shadow-brutal hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all bg-mainBrand text-white hover:bg-mainBrand cursor-pointer"
+            >
               <a href="#contact">LET'S TALK</a>
+            </Button>
+
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="text-lg font-bold border-4 border-foreground shadow-brutal hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all bg-bgBrand cursor-pointer"
+            >
+              <a href="/cv.pdf" download="Samy_CV.pdf">
+                DOWNLOAD CV
+              </a>
             </Button>
           </div>
         </motion.div>
