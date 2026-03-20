@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,6 +29,38 @@ const projects = [
 ];
 
 export default function App() {
+  const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setFormStatus("submitting");
+
+    // Grab the data from the form
+    const formData = new FormData(event.currentTarget);
+
+    // Web3Forms access key
+    formData.append("access_key", "fa441d0e-c6d1-41e5-9fd2-7e80b5658873");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setFormStatus("success");
+        event.currentTarget.reset(); // Clear the form fields
+        setTimeout(() => setFormStatus("idle"), 5000); // Reset button after 5 seconds
+      } else {
+        setFormStatus("error");
+      }
+    } catch (error) {
+      setFormStatus("error");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-bgBrand text-foreground p-8 selection:bg-mainBrand selection:text-white">
       {/* Brutalist Header */}
@@ -157,12 +190,14 @@ export default function App() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="bg-white border-8 border-foreground p-8 md:p-12 shadow-brutal-lg flex flex-col gap-6"
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={onSubmit}
             >
               <div className="space-y-3">
                 <Label htmlFor="name" className="font-sans font-black uppercase text-xl">Name</Label>
                 <Input
                   id="name"
+                  name="name" // Required for Web3Forms
+                  required
                   placeholder="JOHN DOE"
                   className="rounded-none border-4 border-foreground h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:border-mainBrand focus-visible:bg-accent/10 bg-bgBrand transition-colors"
                 />
@@ -172,7 +207,9 @@ export default function App() {
                 <Label htmlFor="email" className="font-sans font-black uppercase text-xl">Email</Label>
                 <Input
                   id="email"
+                  name="email" // Required for Web3Forms
                   type="email"
+                  required
                   placeholder="JOHN@DOE.COM"
                   className="rounded-none border-4 border-foreground h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:border-mainBrand focus-visible:bg-accent/10 bg-bgBrand transition-colors"
                 />
@@ -182,13 +219,24 @@ export default function App() {
                 <Label htmlFor="message" className="font-sans font-black uppercase text-xl">Message</Label>
                 <Textarea
                   id="message"
+                  name="message" // Required for Web3Forms
+                  required
                   placeholder="TELL ME ABOUT YOUR PROJECT..."
                   className="rounded-none border-4 border-foreground min-h-[200px] text-xl font-bold font-sans focus-visible:ring-0 focus-visible:border-mainBrand focus-visible:bg-accent/10 bg-bgBrand resize-none transition-colors p-4"
                 />
               </div>
 
-              <Button type="submit" size="lg" className="w-full h-20 mt-6 text-2xl font-black rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-bgBrand hover:text-mainBrand">
-                SEND TRANSMISSION
+              {/* Dynamic Button State */}
+              <Button
+                type="submit"
+                size="lg"
+                disabled={formStatus === "submitting"}
+                className="w-full h-20 mt-6 text-2xl font-black rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-bgBrand hover:text-mainBrand disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {formStatus === "idle" && "SEND TRANSMISSION"}
+                {formStatus === "submitting" && "SENDING..."}
+                {formStatus === "success" && "TRANSMISSION SENT!"}
+                {formStatus === "error" && "ERROR. TRY AGAIN."}
               </Button>
             </motion.form>
           </div>
