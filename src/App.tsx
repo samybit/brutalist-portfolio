@@ -2,8 +2,10 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
-// Data array for the grid
 const projects = [
   {
     title: "Orbital: 3D Solar System",
@@ -39,8 +41,8 @@ export default function App() {
         </nav>
       </header>
 
-      {/* Hero Content */}
       <main className="max-w-6xl mx-auto">
+        {/* Hero Content */}
         <motion.div 
           initial={{ x: -50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
@@ -56,7 +58,7 @@ export default function App() {
           </p>
 
           <div className="flex gap-4">
-            <Button size="lg" className="h-16 px-10 text-xl font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all">
+            <Button size="lg" className="h-16 px-10 text-xl font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-mainBrand">
               LET'S TALK
             </Button>
           </div>
@@ -108,6 +110,81 @@ export default function App() {
                 </Card>
               </motion.div>
             ))}
+          </div>
+        </section>
+
+        {/* Contact Section */}
+        <section id="contact" className="mb-32">
+          <div className="flex items-center gap-6 mb-12">
+            <div className="h-2 w-12 bg-foreground"></div>
+            <h3 className="text-5xl font-heading font-black uppercase tracking-tight">Initiate Contact</h3>
+            <div className="h-2 flex-grow bg-foreground"></div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+            <motion.div 
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <h4 className="text-5xl md:text-7xl font-heading font-black uppercase mb-8 leading-[0.85]">
+                Got a <br/> <span className="text-mainBrand">Project</span> <br/> in mind?
+              </h4>
+              <p className="font-sans text-2xl font-bold mb-8 max-w-md leading-tight">
+                I'm actively taking on new freelance clients and open to full-time roles. Drop a transmission below.
+              </p>
+              
+              <div className="space-y-4 font-sans font-black uppercase text-xl mt-12">
+                <div className="flex items-center gap-4">
+                  <div className="w-6 h-6 bg-mainBrand border-4 border-foreground"></div>
+                  <p>Based in Egypt</p>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="w-6 h-6 bg-foreground border-4 border-foreground"></div>
+                  <p>Available Worldwide</p>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.form 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="bg-white border-8 border-foreground p-8 md:p-12 shadow-brutal-lg flex flex-col gap-6"
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <div className="space-y-3">
+                <Label htmlFor="name" className="font-sans font-black uppercase text-xl">Name</Label>
+                <Input 
+                  id="name" 
+                  placeholder="JOHN DOE" 
+                  className="rounded-none border-4 border-foreground h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:border-mainBrand focus-visible:bg-accent/10 bg-bgBrand transition-colors" 
+                />
+              </div>
+              
+              <div className="space-y-3">
+                <Label htmlFor="email" className="font-sans font-black uppercase text-xl">Email</Label>
+                <Input 
+                  id="email" 
+                  type="email" 
+                  placeholder="JOHN@DOE.COM" 
+                  className="rounded-none border-4 border-foreground h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:border-mainBrand focus-visible:bg-accent/10 bg-bgBrand transition-colors" 
+                />
+              </div>
+              
+              <div className="space-y-3">
+                <Label htmlFor="message" className="font-sans font-black uppercase text-xl">Message</Label>
+                <Textarea 
+                  id="message" 
+                  placeholder="TELL ME ABOUT YOUR PROJECT..." 
+                  className="rounded-none border-4 border-foreground min-h-[200px] text-xl font-bold font-sans focus-visible:ring-0 focus-visible:border-mainBrand focus-visible:bg-accent/10 bg-bgBrand resize-none transition-colors p-4" 
+                />
+              </div>
+              
+              <Button type="submit" size="lg" className="w-full h-20 mt-6 text-2xl font-black rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-foreground">
+                SEND TRANSMISSION
+              </Button>
+            </motion.form>
           </div>
         </section>
       </main>
