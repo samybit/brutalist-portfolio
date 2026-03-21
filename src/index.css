@@ -112,6 +112,7 @@
 
   html {
     @apply font-mono scroll-smooth;
+    font-size: 90%; /* Scales every Tailwind 'rem' value down by 10% */
   }
 
   /* --- BRUTALIST SCROLLBAR --- */
