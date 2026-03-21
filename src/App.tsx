@@ -150,7 +150,8 @@ export default function App() {
           'input[type="text"]',
           'input[type="email"]',
           'button',
-          'textarea'
+          'textarea',
+          'label'
         ]}
         innerStyle={{
           borderRadius: '0',
