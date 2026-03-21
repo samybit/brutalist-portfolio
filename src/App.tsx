@@ -111,27 +111,52 @@ export default function App() {
           className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter cursor-pointer hover:text-mainBrand transition-colors"
           onClick={() => setActiveView("home")}
         >
-          {/* FIX 1: Locked the dot to the brand color permanently */}
           Samy<span className="text-mainBrand">.</span>Dev
         </h1>
-        <nav className="flex gap-6 font-sans font-bold uppercase text-base w-full sm:w-auto border-t-4 border-foreground pt-4 sm:border-none sm:pt-0">
+
+        {/* Changed flex to flex-wrap so the extra links don't break the layout on smaller screens */}
+        <nav className="flex flex-wrap gap-4 sm:gap-6 font-sans font-bold uppercase text-base w-full sm:w-auto border-t-4 border-foreground pt-4 sm:border-none sm:pt-0">
           <button
             onClick={() => setActiveView("home")}
             className={`underline decoration-4 underline-offset-4 transition-colors hover:text-mainBrand ${activeView === "home" ? "text-mainBrand" : "text-foreground"}`}
           >
             Work
           </button>
+
           <button
             onClick={() => setActiveView("about")}
             className={`underline decoration-4 underline-offset-4 transition-colors hover:text-mainBrand ${activeView === "about" ? "text-mainBrand" : "text-foreground"}`}
           >
             About
           </button>
-          {activeView === "home" && (
-            <a href="#contact" className="hover:text-mainBrand underline decoration-4 underline-offset-4 transition-colors text-foreground">
-              Contact
-            </a>
-          )}
+
+          {/* Contact link is now permanent to prevent layout shift */}
+          <a
+            href="#contact"
+            onClick={(e) => {
+              if (activeView !== "home") {
+                e.preventDefault(); // Stop standard jump
+                setActiveView("home"); // Switch to home view
+                // Wait for React to render the home page, then scroll
+                setTimeout(() => {
+                  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+                }, 100);
+              }
+            }}
+            className="hover:text-mainBrand underline decoration-4 underline-offset-4 transition-colors text-foreground"
+          >
+            Contact
+          </a>
+
+          {/* Legacy Portfolio Link */}
+          <a
+            href="https://my-portfolio-seven-beta-98.vercel.app/"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-mainBrand underline decoration-4 underline-offset-4 transition-colors text-foreground"
+          >
+            Archive
+          </a>
         </nav>
       </header>
 
