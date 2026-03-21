@@ -48,7 +48,13 @@ const projects = [
 
 export default function App() {
   // --- PAGE ROUTING STATE ---
-  const [activeView, setActiveView] = useState<"home" | "about">("home");
+  // Added initialization logic to check if GitHub Pages redirected a lost user here
+  const [activeView, setActiveView] = useState<"home" | "about" | "404">(() => {
+    if (typeof window !== "undefined" && window.location.search.includes("404=true")) {
+      return "404";
+    }
+    return "home";
+  });
 
   // --- FORM STATE ---
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
@@ -103,21 +109,26 @@ export default function App() {
     }
   };
 
+  // Helper function to cleanly route home and remove the ?404=true URL flag
+  const routeHome = () => {
+    window.history.replaceState({}, document.title, window.location.pathname);
+    setActiveView("home");
+  };
+
   return (
     <div className="min-h-screen bg-bgBrand text-foreground p-8 selection:bg-mainBrand selection:text-white">
       {/* --- RESPONSIVE NAVBAR --- */}
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b-8 border-foreground pb-6 mb-12 md:mb-20 gap-6 sm:gap-0">
         <h1
           className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter cursor-pointer hover:text-mainBrand transition-colors"
-          onClick={() => setActiveView("home")}
+          onClick={routeHome}
         >
           Samy<span className="text-mainBrand">.</span>Dev
         </h1>
 
-        {/* Changed flex to flex-wrap so the extra links don't break the layout on smaller screens */}
         <nav className="flex flex-wrap gap-4 sm:gap-6 font-sans font-bold uppercase text-base w-full sm:w-auto border-t-4 border-foreground pt-4 sm:border-none sm:pt-0">
           <button
-            onClick={() => setActiveView("home")}
+            onClick={routeHome}
             className={`underline decoration-4 underline-offset-4 transition-colors hover:text-mainBrand ${activeView === "home" ? "text-mainBrand" : "text-foreground"}`}
           >
             Work
@@ -130,14 +141,12 @@ export default function App() {
             About
           </button>
 
-          {/* Contact link is now permanent to prevent layout shift */}
           <a
             href="#contact"
             onClick={(e) => {
               if (activeView !== "home") {
-                e.preventDefault(); // Stop standard jump
-                setActiveView("home"); // Switch to home view
-                // Wait for React to render the home page, then scroll
+                e.preventDefault(); 
+                routeHome(); 
                 setTimeout(() => {
                   document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
                 }, 100);
@@ -164,7 +173,7 @@ export default function App() {
       <main className="max-w-6xl mx-auto">
 
         {/* ========================================= */}
-        {/* HOME VIEW                  */}
+        {/* HOME VIEW                                 */}
         {/* ========================================= */}
         {activeView === "home" && (
           <motion.div
@@ -354,7 +363,7 @@ export default function App() {
         )}
 
         {/* ========================================= */}
-        {/* ABOUT VIEW                  */}
+        {/* ABOUT VIEW                                */}
         {/* ========================================= */}
         {activeView === "about" && (
           <motion.div
@@ -491,6 +500,36 @@ export default function App() {
                 </Card>
               </div>
             </div>
+          </motion.div>
+        )}
+
+        {/* ========================================= */}
+        {/* 404 ERROR VIEW                            */}
+        {/* ========================================= */}
+        {activeView === "404" && (
+          <motion.div
+            key="404"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4 }}
+            className="flex flex-col items-center justify-center py-20 text-center"
+          >
+            <h2 className="text-[150px] md:text-[250px] font-heading font-black leading-none text-foreground mb-4">
+              4<span className="text-mainBrand">0</span>4
+            </h2>
+            <div className="bg-foreground text-bgBrand px-6 py-2 font-sans font-black uppercase text-2xl md:text-4xl tracking-widest mb-8">
+              Transmission Lost
+            </div>
+            <p className="font-sans text-xl md:text-2xl font-bold max-w-lg mb-12">
+              The coordinate you are looking for does not exist in this sector.
+            </p>
+            <Button
+              onClick={routeHome}
+              size="lg"
+              className="h-16 px-10 text-xl font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-bgBrand hover:text-mainBrand cursor-pointer"
+            >
+              RETURN TO BASE
+            </Button>
           </motion.div>
         )}
 
