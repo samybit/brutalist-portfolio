@@ -69,15 +69,19 @@ export default function App() {
   const [isDesktop, setIsDesktop] = useState(true);
 
   useEffect(() => {
-    // Only show the custom cursor on screens 768px or wider
-    const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 768);
+    // Check if the primary input mechanism can hover and is a precise pointer (a mouse)
+    const checkPointer = () => {
+      const hasMouse = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+      setIsDesktop(hasMouse);
     };
 
-    handleResize(); // Check immediately on load
+    checkPointer(); // Check immediately on load
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    // Listen for hardware changes (like plugging/unplugging a mouse on a tablet)
+    const mediaQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+    mediaQuery.addEventListener("change", checkPointer);
+
+    return () => mediaQuery.removeEventListener("change", checkPointer);
   }, []);
 
   // --- DYNAMIC TAB TITLE LOGIC ---
