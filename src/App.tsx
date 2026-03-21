@@ -47,9 +47,11 @@ const projects = [
 ];
 
 export default function App() {
-  const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  // --- PAGE ROUTING STATE ---
+  const [activeView, setActiveView] = useState<"home" | "about">("home");
 
-  // Custom error messages
+  // --- FORM STATE ---
+  const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errors, setErrors] = useState<{ name?: string, email?: string, message?: string }>({});
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -62,28 +64,23 @@ export default function App() {
     const email = formData.get("email") as string;
     const message = formData.get("message") as string;
 
-    // Custom Validation Rules
     if (!name.trim()) newErrors.name = "IDENTIFICATION REQUIRED.";
-
     if (!email.trim()) {
       newErrors.email = "EMAIL ADDRESS REQUIRED.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       newErrors.email = "INVALID EMAIL FORMAT.";
     }
-
     if (!message.trim()) newErrors.message = "TRANSMISSION CANNOT BE EMPTY.";
 
-    // If there are errors, stop the submission and show them
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
 
-    // If we pass validation, clear errors and proceed
     setErrors({});
     setFormStatus("submitting");
 
-    // Web3Forms
+    // YOUR ACTUAL WEB3FORMS KEY
     formData.append("access_key", "fa441d0e-c6d1-41e5-9fd2-7e80b5658873");
 
     try {
@@ -96,8 +93,8 @@ export default function App() {
 
       if (data.success) {
         setFormStatus("success");
-        event.currentTarget.reset(); // Clear the form fields
-        setTimeout(() => setFormStatus("idle"), 5000); // Reset button after 5 seconds
+        event.currentTarget.reset();
+        setTimeout(() => setFormStatus("idle"), 5000);
       } else {
         setFormStatus("error");
       }
@@ -108,207 +105,372 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-bgBrand text-foreground p-8 selection:bg-mainBrand selection:text-white">
-      {/* Brutalist Header */}
+      {/* --- RESPONSIVE NAVBAR --- */}
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b-8 border-foreground pb-6 mb-12 md:mb-20 gap-6 sm:gap-0">
-        <h1 className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter">
+        <h1
+          className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter cursor-pointer hover:text-mainBrand transition-colors"
+          onClick={() => setActiveView("home")}
+        >
+          {/* FIX 1: Locked the dot to the brand color permanently */}
           Samy<span className="text-mainBrand">.</span>Dev
         </h1>
         <nav className="flex gap-6 font-sans font-bold uppercase text-base w-full sm:w-auto border-t-4 border-foreground pt-4 sm:border-none sm:pt-0">
-          <a href="#work" className="hover:text-mainBrand underline decoration-4 underline-offset-4 transition-colors">Work</a>
-          <a href="#contact" className="hover:text-mainBrand underline decoration-4 underline-offset-4 transition-colors">Contact</a>
+          <button
+            onClick={() => setActiveView("home")}
+            className={`underline decoration-4 underline-offset-4 transition-colors hover:text-mainBrand ${activeView === "home" ? "text-mainBrand" : "text-foreground"}`}
+          >
+            Work
+          </button>
+          <button
+            onClick={() => setActiveView("about")}
+            className={`underline decoration-4 underline-offset-4 transition-colors hover:text-mainBrand ${activeView === "about" ? "text-mainBrand" : "text-foreground"}`}
+          >
+            About
+          </button>
+          {activeView === "home" && (
+            <a href="#contact" className="hover:text-mainBrand underline decoration-4 underline-offset-4 transition-colors text-foreground">
+              Contact
+            </a>
+          )}
         </nav>
       </header>
 
+      {/* --- CONDITIONAL RENDERING LOGIC --- */}
       <main className="max-w-6xl mx-auto">
-        {/* Hero Content */}
-        <motion.div
-          initial={{ x: -50, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="mb-32"
-        >
-          <h2 className="text-5xl sm:text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-8 md:mb-10 break-words">
-            Design <br /> Without <br /> <span className="italic text-mainBrand">Apology.</span>
-          </h2>
 
-          <p className="font-sans text-xl md:text-2xl max-w-xl font-bold mb-12 leading-tight">
-            A developer building interfaces that demand attention through heavy borders and sharp typography.
-          </p>
+        {/* ========================================= */}
+        {/* HOME VIEW                  */}
+        {/* ========================================= */}
+        {activeView === "home" && (
+          <motion.div
+            key="home"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            {/* Hero Content */}
+            <div className="mb-32">
+              <h2 className="text-5xl sm:text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-8 md:mb-10 break-words">
+                Design <br /> Without <br /> <span className="italic text-mainBrand">Apology.</span>
+              </h2>
 
-          <div className="flex flex-wrap gap-4">
-            <Button
-              asChild
-              size="lg"
-              className="text-lg font-bold border-4 border-foreground shadow-brutal hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all bg-mainBrand text-white hover:bg-mainBrand cursor-pointer"
-            >
-              <a href="#contact">LET'S TALK</a>
-            </Button>
-
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="text-lg font-bold border-4 border-foreground shadow-brutal hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all bg-bgBrand cursor-pointer"
-            >
-              <a href="/cv.pdf" download="Samy_CV.pdf">
-                DOWNLOAD CV
-              </a>
-            </Button>
-          </div>
-        </motion.div>
-
-        {/* Selected Work Section */}
-        <section id="work" className="mb-32">
-          <div className="flex items-center gap-6 mb-12">
-            <div className="h-2 w-12 bg-foreground"></div>
-            <h3 className="text-5xl font-heading font-black uppercase tracking-tight">
-              Selected Work
-            </h3>
-            <div className="h-2 flex-grow bg-foreground"></div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project, index) => (
-              <motion.div
-                key={index}
-                initial={{ y: 50, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-              >
-                <Card className="h-full flex flex-col rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-2 hover:translate-y-2 transition-all bg-white duration-200 cursor-pointer group">
-                  <CardHeader className="border-b-4 border-foreground bg-accent/20 p-6">
-                    <CardTitle className="text-2xl font-heading font-black uppercase group-hover:text-mainBrand transition-colors">
-                      {project.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex-grow p-6">
-                    <CardDescription className="font-sans text-lg text-foreground font-medium mb-6">
-                      {project.description}
-                    </CardDescription>
-                    <div className="flex flex-wrap gap-2">
-                      {project.tech.map((tech, i) => (
-                        <Badge
-                          key={i}
-                          variant="outline"
-                          className="rounded-none border-2 border-foreground font-sans font-bold uppercase text-xs px-3 py-1"
-                        >
-                          {tech}
-                        </Badge>
-                      ))}
-                    </div>
-                  </CardContent>
-                  <CardFooter className="p-6 pt-6 mt-auto">
-                    <a href={project.link} className="font-sans font-bold uppercase text-sm underline decoration-4 underline-offset-4 hover:text-mainBrand transition-colors">
-                      View Project &rarr;
-                    </a>
-                  </CardFooter>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        {/* Contact Section */}
-        <section id="contact" className="mb-32">
-          <div className="flex items-center gap-6 mb-12">
-            <div className="h-2 w-12 bg-foreground"></div>
-            <h3 className="text-5xl font-heading font-black uppercase tracking-tight">
-              Initiate Contact
-            </h3>
-            <div className="h-2 flex-grow bg-foreground"></div>
-          </div>
-
-          <div className="flex gap-4 mb-8 font-sans font-bold uppercase underline decoration-4 underline-offset-4 text-lg">
-            <a href="https://www.upwork.com/freelancers/~01bcf00bfe590a5331" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">Upwork</a>
-            <a href="https://khamsat.com/user/samy-b" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">Khamsat</a>
-            <a href="https://mostaql.com/u/Samy_01" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">Mostaql</a>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <h4 className="text-5xl md:text-7xl font-heading font-black uppercase mb-8 leading-[0.85]">
-                Got a <br /> <span className="text-mainBrand">Project</span> <br /> in mind
-              </h4>
-              <p className="font-sans text-2xl font-bold mb-8 max-w-md leading-tight">
-                I'm actively taking on new freelance clients and open to full-time roles. Drop a transmission below.
+              <p className="font-sans text-xl md:text-2xl max-w-xl font-bold mb-12 leading-tight">
+                A developer building interfaces that demand attention through heavy borders and sharp typography.
               </p>
 
-              <div className="space-y-4 font-sans font-black uppercase text-xl mt-12">
-                <div className="flex items-center gap-4">
-                  <div className="w-6 h-6 bg-mainBrand border-4 border-foreground"></div>
-                  <p>Based in Egypt</p>
+              <div className="flex flex-wrap gap-4">
+                <Button
+                  asChild
+                  size="lg"
+                  className="h-16 px-10 text-xl font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-bgBrand hover:text-mainBrand cursor-pointer"
+                >
+                  <a href="#contact">LET'S TALK</a>
+                </Button>
+
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="h-16 px-10 text-xl font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-bgBrand cursor-pointer hover:text-mainBrand"
+                >
+                  <a href="/cv.pdf" download="Samy_CV.pdf">
+                    DOWNLOAD CV
+                  </a>
+                </Button>
+              </div>
+            </div>
+
+            {/* Selected Work Section */}
+            <section id="work" className="mb-32">
+              <div className="flex items-center gap-6 mb-12">
+                <div className="h-2 w-12 bg-foreground"></div>
+                <h3 className="text-5xl font-heading font-black uppercase tracking-tight">Selected Work</h3>
+                <div className="h-2 flex-grow bg-foreground"></div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {projects.map((project, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ y: 50, opacity: 0 }}
+                    whileInView={{ y: 0, opacity: 1 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                  >
+                    <Card className="h-full flex flex-col rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-2 hover:translate-y-2 transition-all bg-white duration-200 cursor-pointer group">
+                      <CardHeader className="border-b-4 border-foreground bg-accent/20 p-6">
+                        <CardTitle className="text-2xl font-heading font-black uppercase group-hover:text-mainBrand transition-colors">
+                          {project.title}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="flex-grow p-6">
+                        <CardDescription className="font-sans text-lg text-foreground font-medium mb-6">
+                          {project.description}
+                        </CardDescription>
+                        <div className="flex flex-wrap gap-2">
+                          {project.tech.map((tech, i) => (
+                            <Badge
+                              key={i}
+                              variant="outline"
+                              className="rounded-none border-2 border-foreground font-sans font-bold uppercase text-xs px-3 py-1 bg-white"
+                            >
+                              {tech}
+                            </Badge>
+                          ))}
+                        </div>
+                      </CardContent>
+                      <CardFooter className="p-6 pt-6 mt-auto">
+                        <a href={project.link} target="_blank" rel="noreferrer" className="font-sans font-bold uppercase text-sm underline decoration-4 underline-offset-4 hover:text-mainBrand transition-colors">
+                          View Project &rarr;
+                        </a>
+                      </CardFooter>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
+            </section>
+
+            {/* Contact Section */}
+            <section id="contact" className="mb-32">
+              <div className="flex items-center gap-6 mb-12">
+                <div className="h-2 w-12 bg-foreground"></div>
+                <h3 className="text-5xl font-heading font-black uppercase tracking-tight">Initiate Contact</h3>
+                <div className="h-2 flex-grow bg-foreground"></div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+                <motion.div
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                >
+                  <h4 className="text-5xl md:text-7xl font-heading font-black uppercase mb-8 leading-[0.85]">
+                    Got a <br /> <span className="text-mainBrand">Project</span> <br /> in mind?
+                  </h4>
+                  <p className="font-sans text-2xl font-bold mb-8 max-w-md leading-tight">
+                    I'm actively taking on new freelance clients and open to full-time roles. Drop a transmission below.
+                  </p>
+
+                  <div className="space-y-4 font-sans font-black uppercase text-xl mt-12 mb-12">
+                    <div className="flex items-center gap-4">
+                      <div className="w-6 h-6 bg-mainBrand border-4 border-foreground"></div>
+                      <p>Based in Egypt</p>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="w-6 h-6 bg-foreground border-4 border-foreground"></div>
+                      <p>Available Worldwide</p>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-6 font-sans font-bold uppercase underline decoration-4 underline-offset-4 text-xl">
+                    <a href="https://upwork.com/freelancers/YOUR_PROFILE" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">Upwork</a>
+                    <a href="https://khamsat.com/user/YOUR_PROFILE" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">Khamsat</a>
+                    <a href="https://mostaql.com/u/YOUR_PROFILE" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">Mostaql</a>
+                  </div>
+                </motion.div>
+
+                <motion.form
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="bg-white border-8 border-foreground p-8 md:p-12 shadow-brutal-lg flex flex-col gap-6"
+                  onSubmit={onSubmit}
+                  noValidate
+                >
+                  <div className="space-y-3">
+                    <Label htmlFor="name" className="font-sans font-black uppercase text-xl">Name</Label>
+                    <Input
+                      id="name"
+                      name="name"
+                      placeholder="JOHN DOE"
+                      className={`rounded-none border-4 h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:bg-accent/10 bg-bgBrand transition-colors ${errors.name ? 'border-mainBrand focus-visible:border-mainBrand' : 'border-foreground focus-visible:border-mainBrand'}`}
+                    />
+                    {errors.name && <p className="text-mainBrand font-bold font-sans uppercase text-sm">{errors.name}</p>}
+                  </div>
+
+                  <div className="space-y-3">
+                    <Label htmlFor="email" className="font-sans font-black uppercase text-xl">Email</Label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      placeholder="JOHN@DOE.COM"
+                      className={`rounded-none border-4 h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:bg-accent/10 bg-bgBrand transition-colors ${errors.email ? 'border-mainBrand focus-visible:border-mainBrand' : 'border-foreground focus-visible:border-mainBrand'}`}
+                    />
+                    {errors.email && <p className="text-mainBrand font-bold font-sans uppercase text-sm">{errors.email}</p>}
+                  </div>
+
+                  <div className="space-y-3">
+                    <Label htmlFor="message" className="font-sans font-black uppercase text-xl">Message</Label>
+                    <Textarea
+                      id="message"
+                      name="message"
+                      placeholder="TELL ME ABOUT YOUR PROJECT..."
+                      className={`rounded-none border-4 min-h-[200px] text-xl font-bold font-sans focus-visible:ring-0 focus-visible:bg-accent/10 bg-bgBrand resize-none transition-colors p-4 ${errors.message ? 'border-mainBrand focus-visible:border-mainBrand' : 'border-foreground focus-visible:border-mainBrand'}`}
+                    />
+                    {errors.message && <p className="text-mainBrand font-bold font-sans uppercase text-sm">{errors.message}</p>}
+                  </div>
+
+                  <Button
+                    type="submit"
+                    size="lg"
+                    disabled={formStatus === "submitting"}
+                    className="w-full h-20 mt-6 text-2xl font-black rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-bgBrand hover:text-mainBrand disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {formStatus === "idle" && "SEND TRANSMISSION"}
+                    {formStatus === "submitting" && "SENDING..."}
+                    {formStatus === "success" && "TRANSMISSION SENT!"}
+                    {formStatus === "error" && "ERROR. TRY AGAIN."}
+                  </Button>
+                </motion.form>
+              </div>
+            </section>
+          </motion.div>
+        )}
+
+        {/* ========================================= */}
+        {/* ABOUT VIEW                  */}
+        {/* ========================================= */}
+        {activeView === "about" && (
+          <motion.div
+            key="about"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4 }}
+            className="pb-32"
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+
+              {/* Left Column: Bio */}
+              <div className="lg:col-span-7 space-y-8">
+                <h2 className="text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-8">
+                  About <br /> <span className="text-mainBrand">Me.</span>
+                </h2>
+
+                <div className="font-sans text-xl md:text-2xl font-bold space-y-6 max-w-2xl border-l-8 border-mainBrand pl-6">
+                  <p>
+                    I am a Full Stack Developer based in Egypt, bridging the gap between modern JavaScript interfaces and powerful Python backends.
+                  </p>
+                  <p>
+                    My journey began with Python automation and scripting, building tools to scrape data and automate tasks. I then expanded into full-stack development, mastering the MERN stack to engineer dynamic applications.
+                  </p>
+                  <p>
+                    Today, I focus on building complete, containerized applications using Docker, ensuring that what runs on my machine runs everywhere.
+                  </p>
+                  <p className="text-foreground/70 text-lg">
+                    When I'm not coding, you can find me exploring retro tech, playing classic games, or experimenting with 3D web graphics.
+                  </p>
                 </div>
-                <div className="flex items-center gap-4">
-                  <div className="w-6 h-6 bg-foreground border-4 border-foreground"></div>
-                  <p>Available Worldwide</p>
+              </div>
+
+              {/* Right Column: Education & Certs */}
+              <div className="lg:col-span-5 space-y-12 mt-8 lg:mt-0">
+                {/* Education */}
+                <div>
+                  <h3 className="text-3xl font-heading font-black uppercase tracking-tight border-b-4 border-foreground pb-2 mb-6">
+                    Education
+                  </h3>
+                  <div className="bg-white border-4 border-foreground shadow-brutal-sm p-6">
+                    <div className="flex justify-between items-start mb-4 flex-col sm:flex-row gap-2 sm:gap-0">
+                      <div>
+                        <h5 className="font-black font-sans uppercase text-xl">B.B.A.</h5>
+                        <p className="font-sans font-bold text-mainBrand">Ain Shams University</p>
+                      </div>
+                      <Badge className="rounded-none border-2 border-foreground bg-bgBrand text-foreground font-black text-sm uppercase">2019 - 2023</Badge>
+                    </div>
+                    <p className="font-sans font-medium text-base">
+                      Developed a foundation in logic, problem-solving, and a strategic mindset for system architecture. This allows me to translate business requirements into efficient, scalable technical solutions.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Certifications */}
+                <div>
+                  <h3 className="text-3xl font-heading font-black uppercase tracking-tight border-b-4 border-foreground pb-2 mb-6">
+                    Certifications
+                  </h3>
+                  <div className="space-y-4">
+                    <div className="bg-white border-4 border-foreground p-4 flex items-center justify-between hover:translate-x-1 hover:-translate-y-1 transition-transform shadow-brutal-sm">
+                      <span className="font-black font-sans uppercase text-lg">MERN Stack & AI</span>
+                      <span className="font-black font-sans text-mainBrand uppercase">ITI</span>
+                    </div>
+                    <div className="bg-white border-4 border-foreground p-4 flex items-center justify-between hover:translate-x-1 hover:-translate-y-1 transition-transform shadow-brutal-sm">
+                      <span className="font-black font-sans uppercase text-lg">Database Fundamentals</span>
+                      <span className="font-black font-sans text-mainBrand uppercase">egFWD</span>
+                    </div>
+                    <div className="bg-white border-4 border-foreground p-4 flex items-center justify-between hover:translate-x-1 hover:-translate-y-1 transition-transform shadow-brutal-sm">
+                      <span className="font-black font-sans uppercase text-lg">CS50x</span>
+                      <span className="font-black font-sans text-mainBrand uppercase">Harvard</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </motion.div>
 
-            <motion.form
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="bg-white border-8 border-foreground p-8 md:p-12 shadow-brutal-lg flex flex-col gap-6"
-              onSubmit={onSubmit}
-              noValidate
-            >
-              <div className="space-y-3">
-                <Label htmlFor="name" className="font-sans font-black uppercase text-xl">Name</Label>
-                <Input
-                  id="name"
-                  name="name"
-                  placeholder="JOHN DOE"
-                  // If there's an error, force the border to be the brand color
-                  className={`rounded-none border-4 h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:bg-accent/10 bg-bgBrand transition-colors ${errors.name ? 'border-mainBrand focus-visible:border-mainBrand' : 'border-foreground focus-visible:border-mainBrand'}`}
-                />
-                {/* Brutalist Error Message */}
-                {errors.name && <p className="text-mainBrand font-bold font-sans uppercase text-sm">{errors.name}</p>}
+            </div>
+
+            {/* Technical Arsenal Grid */}
+            <div className="mt-24">
+              <div className="flex items-center gap-6 mb-12">
+                <div className="h-2 w-12 bg-foreground"></div>
+                <h3 className="text-5xl font-heading font-black uppercase tracking-tight">Technical Arsenal</h3>
+                <div className="h-2 flex-grow bg-foreground"></div>
               </div>
 
-              <div className="space-y-3">
-                <Label htmlFor="email" className="font-sans font-black uppercase text-xl">Email</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="JOHN@DOE.COM"
-                  className={`rounded-none border-4 h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:bg-accent/10 bg-bgBrand transition-colors ${errors.email ? 'border-mainBrand focus-visible:border-mainBrand' : 'border-foreground focus-visible:border-mainBrand'}`}
-                />
-                {errors.email && <p className="text-mainBrand font-bold font-sans uppercase text-sm">{errors.email}</p>}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Frontend */}
+                <Card className="rounded-none border-4 border-foreground shadow-brutal bg-white">
+                  <CardHeader className="border-b-4 border-foreground bg-mainBrand text-white p-4">
+                    <CardTitle className="font-heading font-black uppercase text-2xl">Frontend & UI</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-6 flex flex-wrap gap-3">
+                    {["React.js", "Angular", "JavaScript (ES6+)", "HTML5 & CSS3", "Bootstrap 5", "Figma"].map(skill => (
+                      <Badge key={skill} variant="outline" className="rounded-none border-2 border-foreground font-sans font-bold uppercase text-sm px-3 py-1 bg-bgBrand">{skill}</Badge>
+                    ))}
+                  </CardContent>
+                </Card>
+
+                {/* Backend */}
+                <Card className="rounded-none border-4 border-foreground shadow-brutal bg-white">
+                  {/* FIX 2: Swapped text-white to text-background so it perfectly inverts against bg-foreground */}
+                  <CardHeader className="border-b-4 border-foreground bg-foreground text-background p-4">
+                    <CardTitle className="font-heading font-black uppercase text-2xl">Backend & Database</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-6 flex flex-wrap gap-3">
+                    {["Python", "Node.js", "Express.js", "Flask", "MongoDB", "WTForms"].map(skill => (
+                      <Badge key={skill} variant="outline" className="rounded-none border-2 border-foreground font-sans font-bold uppercase text-sm px-3 py-1 bg-bgBrand">{skill}</Badge>
+                    ))}
+                  </CardContent>
+                </Card>
+
+                {/* DevOps */}
+                <Card className="rounded-none border-4 border-foreground shadow-brutal bg-white">
+                  {/* FIX 3: Swapped text-white to text-background here too */}
+                  <CardHeader className="border-b-4 border-foreground bg-foreground text-background p-4">
+                    <CardTitle className="font-heading font-black uppercase text-2xl">DevOps & Tools</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-6 flex flex-wrap gap-3">
+                    {["Docker", "Git / GitHub", "Linux OS", "Nexus Repo Manager"].map(skill => (
+                      <Badge key={skill} variant="outline" className="rounded-none border-2 border-foreground font-sans font-bold uppercase text-sm px-3 py-1 bg-bgBrand">{skill}</Badge>
+                    ))}
+                  </CardContent>
+                </Card>
+
+                {/* Scripting */}
+                <Card className="rounded-none border-4 border-foreground shadow-brutal bg-white">
+                  <CardHeader className="border-b-4 border-foreground bg-mainBrand text-white p-4">
+                    <CardTitle className="font-heading font-black uppercase text-2xl">Automation & Scripting</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-6 flex flex-wrap gap-3">
+                    {["Selenium", "BeautifulSoup", "Tkinter (GUI)", "REST APIs"].map(skill => (
+                      <Badge key={skill} variant="outline" className="rounded-none border-2 border-foreground font-sans font-bold uppercase text-sm px-3 py-1 bg-bgBrand">{skill}</Badge>
+                    ))}
+                  </CardContent>
+                </Card>
               </div>
+            </div>
+          </motion.div>
+        )}
 
-              <div className="space-y-3">
-                <Label htmlFor="message" className="font-sans font-black uppercase text-xl">Message</Label>
-                <Textarea
-                  id="message"
-                  name="message"
-                  placeholder="TELL ME ABOUT YOUR PROJECT..."
-                  className={`rounded-none border-4 min-h-[200px] text-xl font-bold font-sans focus-visible:ring-0 focus-visible:bg-accent/10 bg-bgBrand resize-none transition-colors p-4 ${errors.message ? 'border-mainBrand focus-visible:border-mainBrand' : 'border-foreground focus-visible:border-mainBrand'}`}
-                />
-                {errors.message && <p className="text-mainBrand font-bold font-sans uppercase text-sm">{errors.message}</p>}
-              </div>
-
-              <Button
-                type="submit"
-                size="lg"
-                disabled={formStatus === "submitting"}
-                className="w-full h-20 mt-6 text-2xl font-black rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-bgBrand hover:text-mainBrand disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {formStatus === "idle" && "SEND TRANSMISSION"}
-                {formStatus === "submitting" && "SENDING..."}
-                {formStatus === "success" && "TRANSMISSION SENT!"}
-                {formStatus === "error" && "ERROR. TRY AGAIN."}
-              </Button>
-            </motion.form>
-
-          </div>
-        </section>
       </main>
     </div>
   );
