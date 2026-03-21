@@ -32,3 +32,17 @@ npm install
 
 # 4. Start the Vite development server
 npm run dev
+```
+
+## 📂 Project Structure
+
+| Path | Description |
+|---|---|
+| `/src/assets/fonts` | Custom typography — `Empirica` and `Kafyelo` |
+| `/src/components/ui` | Raw shadcn components wrapped in brutalist Tailwind utility classes |
+| `/public/cv.pdf` | Directly served resume asset |
+| `.github/workflows/deploy.yml` | Automated build pipeline for Pages |
+
+---
+
+Built by **Samy**. Available for freelance & full-time roles worldwide.
