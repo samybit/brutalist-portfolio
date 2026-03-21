@@ -48,12 +48,21 @@ const projects = [
 ];
 
 export default function App() {
-  // --- PAGE ROUTING STATE ---
-  // Added initialization logic to check if GitHub Pages redirected a lost user here
+  // --- PAGE ROUTING STATE (UPDATED FOR LOCAL 404) ---
   const [activeView, setActiveView] = useState<"home" | "about" | "404">(() => {
-    if (typeof window !== "undefined" && window.location.search.includes("404=true")) {
-      return "404";
-    }
+    if (typeof window === "undefined") return "home";
+
+    const search = window.location.search;
+    const path = window.location.pathname;
+
+    // 1. Check for GitHub Pages redirect
+    if (search.includes("404=true")) return "404";
+
+    // 2. Check for bad local/direct paths (ignoring the root or the repo name)
+    // Adjust this array if you ever change your GitHub repo name!
+    const validPaths = ["/", "/brutalist-portfolio", "/brutalist-portfolio/"];
+    if (!validPaths.includes(path)) return "404";
+
     return "home";
   });
 
@@ -87,7 +96,7 @@ export default function App() {
     setErrors({});
     setFormStatus("submitting");
 
-    // YOUR ACTUAL WEB3FORMS KEY
+    // WEB3FORMS
     formData.append("access_key", "fa441d0e-c6d1-41e5-9fd2-7e80b5658873");
 
     try {
@@ -110,20 +119,21 @@ export default function App() {
     }
   };
 
-  // Helper function to cleanly route home and remove the ?404=true URL flag
   const routeHome = () => {
-    window.history.replaceState({}, document.title, window.location.pathname);
+    // Determine the base path depending on the environment
+    const basePath = window.location.pathname.startsWith('/brutalist-portfolio')
+      ? '/brutalist-portfolio/'
+      : '/';
+    window.history.replaceState({}, document.title, basePath);
     setActiveView("home");
   };
-
-
 
   return (
     <div className="min-h-screen bg-bgBrand text-foreground p-8 selection:bg-mainBrand selection:text-white">
       <AnimatedCursor
         innerSize={20}
-        outerSize={0} /* We remove the trailing outer circle to keep it raw and mechanical */
-        color="255, 51, 102" /* Your mainBrand pink */
+        outerSize={0} /* remove the trailing outer circle to keep it raw and mechanical */
+        color="255, 51, 102" /* mainBrand pink */
         innerScale={1.5}
         clickables={[
           'a',
@@ -133,7 +143,7 @@ export default function App() {
           'textarea'
         ]}
         innerStyle={{
-          borderRadius: '0', /* Absolute square, no rounded corners */
+          borderRadius: '0', /* Absolute square */
           border: '3px solid #000' /* Thick brutalist border */
         }}
       />
@@ -141,7 +151,7 @@ export default function App() {
       {/* --- RESPONSIVE NAVBAR --- */}
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b-8 border-foreground pb-6 mb-12 md:mb-20 gap-6 sm:gap-0">
         <h1
-          className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter cursor-pointer hover:text-mainBrand transition-colors"
+          className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter hover:text-mainBrand transition-colors"
           onClick={routeHome}
         >
           Samy<span className="text-mainBrand">.</span>Dev
@@ -217,7 +227,7 @@ export default function App() {
                 <Button
                   asChild
                   size="lg"
-                  className="h-12 px-6 text-base font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-bgBrand hover:text-mainBrand cursor-pointer"
+                  className="h-12 px-6 text-base font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-bgBrand hover:text-mainBrand"
                 >
                   <a href="#contact">LET'S TALK</a>
                 </Button>
@@ -226,7 +236,7 @@ export default function App() {
                   asChild
                   size="lg"
                   variant="outline"
-                  className="h-12 px-6 text-base font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-bgBrand cursor-pointer hover:text-mainBrand"
+                  className="h-12 px-6 text-base font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-bgBrand hover:text-mainBrand"
                 >
                   <a href="/cv.pdf" download="Samy_CV.pdf">
                     DOWNLOAD CV
@@ -252,7 +262,7 @@ export default function App() {
                     viewport={{ once: true, margin: "-50px" }}
                     transition={{ duration: 0.4, delay: index * 0.1 }}
                   >
-                    <Card className="h-full flex flex-col rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-2 hover:translate-y-2 transition-all bg-white duration-200 cursor-pointer group">
+                    <Card className="h-full flex flex-col rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-2 hover:translate-y-2 transition-all bg-white duration-200 group">
                       <CardHeader className="border-b-4 border-foreground bg-accent/20 p-6">
                         <CardTitle className="text-2xl font-heading font-black uppercase group-hover:text-mainBrand transition-colors">
                           {project.title}
@@ -547,7 +557,7 @@ export default function App() {
             <Button
               onClick={routeHome}
               size="lg"
-              className="h-16 px-10 text-xl font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-bgBrand hover:text-mainBrand cursor-pointer"
+              className="h-16 px-10 text-xl font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-bgBrand hover:text-mainBrand"
             >
               RETURN TO BASE
             </Button>
