@@ -431,9 +431,8 @@ export default function App() {
 
                 {/* Backend */}
                 <Card className="rounded-none border-4 border-foreground shadow-brutal bg-white">
-                  {/* FIX 2: Swapped text-white to text-background so it perfectly inverts against bg-foreground */}
-                  <CardHeader className="border-b-4 border-foreground bg-foreground text-background p-4">
-                    <CardTitle className="font-heading font-black uppercase text-2xl">Backend & Database</CardTitle>
+                  <CardHeader className="p-4">
+                    <CardTitle className="font-heading font-black uppercase text-2xl text-mainBrand">Backend & Database</CardTitle>
                   </CardHeader>
                   <CardContent className="p-6 flex flex-wrap gap-3">
                     {["Python", "Node.js", "Express.js", "Flask", "MongoDB", "WTForms"].map(skill => (
@@ -444,9 +443,8 @@ export default function App() {
 
                 {/* DevOps */}
                 <Card className="rounded-none border-4 border-foreground shadow-brutal bg-white">
-                  {/* FIX 3: Swapped text-white to text-background here too */}
-                  <CardHeader className="border-b-4 border-foreground bg-foreground text-background p-4">
-                    <CardTitle className="font-heading font-black uppercase text-2xl">DevOps & Tools</CardTitle>
+                  <CardHeader className="p-4">
+                    <CardTitle className="font-heading font-black uppercase text-2xl text-mainBrand">DevOps & Tools</CardTitle>
                   </CardHeader>
                   <CardContent className="p-6 flex flex-wrap gap-3">
                     {["Docker", "Git / GitHub", "Linux OS", "Nexus Repo Manager"].map(skill => (
