@@ -25,20 +25,65 @@ const projects = [
     description: "A raw, dependency-free e-commerce experience built entirely from scratch without frameworks.",
     tech: ["Vanilla JS", "DOM API", "CSS"],
     link: "https://github.com/samybit/vanilla-js-ecommerce"
+  },
+  {
+    title: "Lead Gen SaaS",
+    description: "Production-ready automated e-commerce data extraction tool. Containerized and built for raw scraping performance.",
+    tech: ["Flask", "Docker", "Pandas"],
+    link: "https://github.com/samybit/lead-gen-tool"
+  },
+  {
+    title: "BearBuzz Tracker",
+    description: "Dual-interface Python engine tracking stock volatility. Dispatches automated SMS financial alerts. Backed by full CI/CD testing.",
+    tech: ["Python", "Twilio API", "CI/CD"],
+    link: "https://github.com/samybit/bearbuzz"
+  },
+  {
+    title: "Progression Board",
+    description: "Full-stack application engineered to log milestones and visually track completion percentages via a dynamic dashboard.",
+    tech: ["Full-Stack", "Web", "UI/UX"],
+    link: "https://github.com/samybit/game-completion-board"
   }
 ];
 
 export default function App() {
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
 
+  // Custom error messages
+  const [errors, setErrors] = useState<{ name?: string, email?: string, message?: string }>({});
+
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const newErrors: { name?: string, email?: string, message?: string } = {};
+
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const message = formData.get("message") as string;
+
+    // Custom Validation Rules
+    if (!name.trim()) newErrors.name = "IDENTIFICATION REQUIRED.";
+
+    if (!email.trim()) {
+      newErrors.email = "EMAIL ADDRESS REQUIRED.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = "INVALID EMAIL FORMAT.";
+    }
+
+    if (!message.trim()) newErrors.message = "TRANSMISSION CANNOT BE EMPTY.";
+
+    // If there are errors, stop the submission and show them
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    // If we pass validation, clear errors and proceed
+    setErrors({});
     setFormStatus("submitting");
 
-    // Grab the data from the form
-    const formData = new FormData(event.currentTarget);
-
-    // Web3Forms access key
+    // Web3Forms
     formData.append("access_key", "fa441d0e-c6d1-41e5-9fd2-7e80b5658873");
 
     try {
@@ -211,42 +256,44 @@ export default function App() {
               viewport={{ once: true }}
               className="bg-white border-8 border-foreground p-8 md:p-12 shadow-brutal-lg flex flex-col gap-6"
               onSubmit={onSubmit}
+              noValidate
             >
               <div className="space-y-3">
                 <Label htmlFor="name" className="font-sans font-black uppercase text-xl">Name</Label>
                 <Input
                   id="name"
-                  name="name" // Required for Web3Forms
-                  required
+                  name="name"
                   placeholder="JOHN DOE"
-                  className="rounded-none border-4 border-foreground h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:border-mainBrand focus-visible:bg-accent/10 bg-bgBrand transition-colors"
+                  // If there's an error, force the border to be the brand color
+                  className={`rounded-none border-4 h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:bg-accent/10 bg-bgBrand transition-colors ${errors.name ? 'border-mainBrand focus-visible:border-mainBrand' : 'border-foreground focus-visible:border-mainBrand'}`}
                 />
+                {/* Brutalist Error Message */}
+                {errors.name && <p className="text-mainBrand font-bold font-sans uppercase text-sm">{errors.name}</p>}
               </div>
 
               <div className="space-y-3">
                 <Label htmlFor="email" className="font-sans font-black uppercase text-xl">Email</Label>
                 <Input
                   id="email"
-                  name="email" // Required for Web3Forms
+                  name="email"
                   type="email"
-                  required
                   placeholder="JOHN@DOE.COM"
-                  className="rounded-none border-4 border-foreground h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:border-mainBrand focus-visible:bg-accent/10 bg-bgBrand transition-colors"
+                  className={`rounded-none border-4 h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:bg-accent/10 bg-bgBrand transition-colors ${errors.email ? 'border-mainBrand focus-visible:border-mainBrand' : 'border-foreground focus-visible:border-mainBrand'}`}
                 />
+                {errors.email && <p className="text-mainBrand font-bold font-sans uppercase text-sm">{errors.email}</p>}
               </div>
 
               <div className="space-y-3">
                 <Label htmlFor="message" className="font-sans font-black uppercase text-xl">Message</Label>
                 <Textarea
                   id="message"
-                  name="message" // Required for Web3Forms
-                  required
+                  name="message"
                   placeholder="TELL ME ABOUT YOUR PROJECT..."
-                  className="rounded-none border-4 border-foreground min-h-[200px] text-xl font-bold font-sans focus-visible:ring-0 focus-visible:border-mainBrand focus-visible:bg-accent/10 bg-bgBrand resize-none transition-colors p-4"
+                  className={`rounded-none border-4 min-h-[200px] text-xl font-bold font-sans focus-visible:ring-0 focus-visible:bg-accent/10 bg-bgBrand resize-none transition-colors p-4 ${errors.message ? 'border-mainBrand focus-visible:border-mainBrand' : 'border-foreground focus-visible:border-mainBrand'}`}
                 />
+                {errors.message && <p className="text-mainBrand font-bold font-sans uppercase text-sm">{errors.message}</p>}
               </div>
 
-              {/* Dynamic Button State */}
               <Button
                 type="submit"
                 size="lg"
@@ -259,6 +306,7 @@ export default function App() {
                 {formStatus === "error" && "ERROR. TRY AGAIN."}
               </Button>
             </motion.form>
+
           </div>
         </section>
       </main>
