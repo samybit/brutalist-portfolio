@@ -65,6 +65,21 @@ export default function App() {
     return "home";
   });
 
+  // --- MOBILE CURSOR FIX ---
+  const [isDesktop, setIsDesktop] = useState(true);
+
+  useEffect(() => {
+    // Only show the custom cursor on screens 768px or wider
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+
+    handleResize(); // Check immediately on load
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   // --- DYNAMIC TAB TITLE LOGIC ---
   useEffect(() => {
     if (activeView === "home") {
@@ -140,24 +155,28 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-bgBrand text-foreground p-8 selection:bg-mainBrand selection:text-white">
-      <AnimatedCursor
-        innerSize={20}
-        outerSize={0} /* removes the trailing outer circle */
-        color="255, 51, 102"
-        innerScale={1.5}
-        clickables={[
-          'a',
-          'input[type="text"]',
-          'input[type="email"]',
-          'button',
-          'textarea',
-          'label'
-        ]}
-        innerStyle={{
-          borderRadius: '0',
-          border: '3px solid #000'
-        }}
-      />
+
+      {/* Custom cursor - Only render if on desktop device */}
+      {isDesktop && (
+        <AnimatedCursor
+          innerSize={20}
+          outerSize={0}
+          color="255, 51, 102"
+          innerScale={1.5}
+          clickables={[
+            'a',
+            'input[type="text"]',
+            'input[type="email"]',
+            'button',
+            'textarea',
+            'label'
+          ]}
+          innerStyle={{
+            borderRadius: '0',
+            border: '3px solid #000'
+          }}
+        />
+      )}
 
       {/* --- RESPONSIVE NAVBAR --- */}
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b-8 border-foreground pb-6 mb-12 md:mb-20 gap-6 sm:gap-0">
@@ -595,6 +614,7 @@ export default function App() {
         )}
 
       </main>
+
     </div>
   );
 }
