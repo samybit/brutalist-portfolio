@@ -143,3 +143,108 @@
     scrollbar-color: #000000 #FF336633;
   }
 }
+
+@layer utilities {
+
+  /* --- 1. INFINITE MARQUEE --- */
+  @keyframes marquee {
+    0% {
+      transform: translateX(0%);
+    }
+
+    100% {
+      transform: translateX(-50%);
+    }
+
+    /* Shifts exactly half its width to create a perfect loop */
+  }
+
+  .animate-marquee {
+    animation: marquee 15s linear infinite;
+  }
+
+  /* --- 2. CSS GLITCH HOVER EFFECT --- */
+  .glitch-hover {
+    position: relative;
+    display: inline-block;
+  }
+
+  .glitch-hover:hover::before,
+  .glitch-hover:hover::after {
+    content: attr(data-text);
+    /* Pulls the text from the HTML attribute */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    pointer-events: none;
+  }
+
+  .glitch-hover:hover::before {
+    left: 4px;
+    text-shadow: -3px 0 #FF3366;
+    /* Your brand pink */
+    animation: glitch-anim-1 0.3s infinite linear alternate-reverse;
+  }
+
+  .glitch-hover:hover::after {
+    left: -4px;
+    text-shadow: 3px 0 #00FFFF;
+    animation: glitch-anim-2 0.4s infinite linear alternate-reverse;
+  }
+
+  /* The chaotic slicing effect */
+  @keyframes glitch-anim-1 {
+    0% {
+      clip-path: inset(20% 0 80% 0);
+    }
+
+    20% {
+      clip-path: inset(60% 0 10% 0);
+    }
+
+    40% {
+      clip-path: inset(40% 0 50% 0);
+    }
+
+    60% {
+      clip-path: inset(80% 0 5% 0);
+    }
+
+    80% {
+      clip-path: inset(10% 0 70% 0);
+    }
+
+    100% {
+      clip-path: inset(30% 0 20% 0);
+    }
+  }
+
+  @keyframes glitch-anim-2 {
+    0% {
+      clip-path: inset(10% 0 60% 0);
+    }
+
+    20% {
+      clip-path: inset(30% 0 20% 0);
+    }
+
+    40% {
+      clip-path: inset(70% 0 10% 0);
+    }
+
+    60% {
+      clip-path: inset(20% 0 50% 0);
+    }
+
+    80% {
+      clip-path: inset(90% 0 5% 0);
+    }
+
+    100% {
+      clip-path: inset(40% 0 30% 0);
+    }
+  }
+}
