@@ -187,7 +187,7 @@ export default function App() {
                 <Button
                   asChild
                   size="lg"
-                  className="h-16 px-10 text-xl font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-bgBrand hover:text-mainBrand cursor-pointer"
+                  className="h-12 px-6 text-base font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-bgBrand hover:text-mainBrand cursor-pointer"
                 >
                   <a href="#contact">LET'S TALK</a>
                 </Button>
@@ -196,7 +196,7 @@ export default function App() {
                   asChild
                   size="lg"
                   variant="outline"
-                  className="h-16 px-10 text-xl font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-bgBrand cursor-pointer hover:text-mainBrand"
+                  className="h-12 px-6 text-base font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-bgBrand cursor-pointer hover:text-mainBrand"
                 >
                   <a href="/cv.pdf" download="Samy_CV.pdf">
                     DOWNLOAD CV
@@ -398,7 +398,7 @@ export default function App() {
                   <div className="bg-white border-4 border-foreground shadow-brutal-sm p-6">
                     <div className="flex justify-between items-start mb-4 flex-col sm:flex-row gap-2 sm:gap-0">
                       <div>
-                        <h5 className="font-black font-sans uppercase text-xl">B.B.A.</h5>
+                        <h5 className="font-black font-sans uppercase text-xl">Bachelor of Commerce (B.B.A.)</h5>
                         <p className="font-sans font-bold text-mainBrand">Ain Shams University</p>
                       </div>
                       <Badge className="rounded-none border-2 border-foreground bg-bgBrand text-foreground font-black text-sm uppercase">2019 - 2023</Badge>
