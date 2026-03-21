@@ -142,8 +142,8 @@ export default function App() {
     <div className="min-h-screen bg-bgBrand text-foreground p-8 selection:bg-mainBrand selection:text-white">
       <AnimatedCursor
         innerSize={20}
-        outerSize={0} /* remove the trailing outer circle to keep it raw and mechanical */
-        color="255, 51, 102" /* mainBrand pink */
+        outerSize={0} /* removes the trailing outer circle */
+        color="255, 51, 102"
         innerScale={1.5}
         clickables={[
           'a',
@@ -153,8 +153,8 @@ export default function App() {
           'textarea'
         ]}
         innerStyle={{
-          borderRadius: '0', /* Absolute square */
-          border: '3px solid #000' /* Thick brutalist border */
+          borderRadius: '0',
+          border: '3px solid #000'
         }}
       />
 
