@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import AnimatedCursor from "react-animated-cursor";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -157,6 +157,30 @@ export default function App() {
     setActiveView("home");
   };
 
+  // ─────────────────────────────────────────────────────────────
+  // NGA-STYLE HERO SCROLL EFFECT
+  // The background image clips upward from the bottom as the user
+  // scrolls. Text uses mix-blend-mode: difference so it appears
+  // white over the dark image and automatically turns dark once
+  // the image has scrolled away and the light page bg is exposed.
+  // ─────────────────────────────────────────────────────────────
+  const heroRef = useRef<HTMLDivElement>(null);
+  const [clipBottom, setClipBottom] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!heroRef.current) return;
+      const heroHeight = heroRef.current.offsetHeight;
+      // 1-to-1 clip: image bottom rises as fast as user scrolls
+      const next = Math.max(0, Math.min(window.scrollY, heroHeight));
+      setClipBottom(next);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // sync on mount
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div className="min-h-screen bg-bgBrand text-foreground p-8 selection:bg-mainBrand selection:text-white">
 
@@ -248,17 +272,71 @@ export default function App() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4 }}
           >
-            {/* Hero Content */}
-            <div className="mb-32">
-              <h2 className="text-6xl sm:text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-8 md:mb-10 break-words">
-                Design <br /> Without <br /> <span className="italic text-mainBrand">Apology.</span>
-              </h2>
+            {/* ── HERO with NGA Scroll Effect ── */}
+            <div
+              ref={heroRef}
+              className="relative mb-32"
+            // No isolation here — we WANT mix-blend-mode to composite
+            // against the real rendered page background below the image.
+            >
+              {/*
+               * Background image layer
+               * clip-path inset shrinks from the BOTTOM as the user scrolls,
+               * so the image "peels away" upward while the page bg is revealed.
+               *
+               * ⚠️  Replace "/hero-bg.jpg" with your actual image file path.
+               *     The dark gradient acts as a fallback if the file is missing.
+               */}
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 pointer-events-none overflow-hidden"
+                style={{
+                  clipPath: `inset(0 0 ${clipBottom}px 0)`,
+                  // Dark gradient fallback — shows if the image fails to load
+                  background: "linear-gradient(160deg, #0d0d0d 0%, #1c1c1c 55%, #0a0a0a 100%)",
+                }}
+              >
+                {/* Your hero background image — swap src for your file */}
+                <img
+                  src="/hero-bg.jpg"
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover"
+                  // If the image doesn't load the gradient above shows instead
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+                />
+                {/* Subtle dark veil so text stays legible over bright images */}
+                <div className="absolute inset-0 bg-black/45" />
+              </div>
 
-              <p className="font-sans text-xl md:text-2xl max-w-xl font-bold mb-12 leading-tight">
-                A developer building interfaces that demand attention through heavy borders and sharp typography.
-              </p>
+              {/*
+               * Text layer — mix-blend-mode: difference + white color
+               * • Over the dark image  → white text visible ✓
+               * • Over the light page bg (after image clips away) → dark text ✓
+               * Buttons are OUTSIDE this div so they keep their own colours.
+               */}
+              <div
+                className="relative pt-20 pb-6"
+                style={{ mixBlendMode: "difference", color: "white" }}
+              >
+                <h2
+                  className="text-6xl sm:text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-8 md:mb-10 break-words"
+                  style={{ color: "inherit" }}
+                >
+                  Design <br /> Without <br />
+                  {/* Keep the italic accent — it will invert correctly with difference */}
+                  <span className="italic" style={{ color: "inherit" }}>Apology.</span>
+                </h2>
 
-              <div className="flex flex-wrap gap-4">
+                <p
+                  className="font-sans text-xl md:text-2xl max-w-xl font-bold mb-12 leading-tight"
+                  style={{ color: "inherit" }}
+                >
+                  A developer building interfaces that demand attention through heavy borders and sharp typography.
+                </p>
+              </div>
+
+              {/* Buttons sit below the blend div — unaffected by mix-blend-mode */}
+              <div className="relative flex flex-wrap gap-4 pb-20">
                 <Button
                   asChild
                   size="lg"
@@ -279,6 +357,7 @@ export default function App() {
                 </Button>
               </div>
             </div>
+            {/* ── End Hero ── */}
 
             {/* The Brutalist Marquee */}
             <div className="border-y-8 border-foreground bg-mainBrand text-white py-3 mb-32 overflow-hidden flex whitespace-nowrap -mx-8 md:mx-0">
