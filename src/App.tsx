@@ -250,7 +250,7 @@ export default function App() {
           >
             {/* Hero Content */}
             <div className="mb-32">
-              <h2 className="text-5xl sm:text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-8 md:mb-10 break-words">
+              <h2 className="text-6xl sm:text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-8 md:mb-10 break-words">
                 Design <br /> Without <br /> <span className="italic text-mainBrand">Apology.</span>
               </h2>
 
