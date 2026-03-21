@@ -2,7 +2,7 @@
 
 > **Design Without Apology.** > A high-contrast, brutalist frontend portfolio built to showcase engineering precision and stark typography.
 
-![Build Status](https://img.shields.io/github/actions/workflow/status/YOUR_USERNAME/samy-dev/deploy.yml?branch=main&style=for-the-badge&color=FF3366)
+![Build Status](https://img.shields.io/github/actions/workflow/status/samybit/brutalist-portfolio/deploy.yml?branch=main&style=for-the-badge&color=FF3366)
 ![Tech Stack](https://img.shields.io/badge/Stack-React%20%7C%20Tailwind%20%7C%20shadcn-black?style=for-the-badge)
 
 ## ⚡ Architecture & Stack
