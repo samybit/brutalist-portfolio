@@ -4,8 +4,8 @@
 
 /* 1. Custom Font Definitions */
 @font-face {
-  font-family: 'Empirica';
-  src: url('./assets/fonts/Empirica.otf') format('opentype');
+  font-family: 'Spectral';
+  src: url('./assets/fonts/Spectral.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
