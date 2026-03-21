@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AnimatedCursor from "react-animated-cursor";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -48,7 +48,7 @@ const projects = [
 ];
 
 export default function App() {
-  // --- PAGE ROUTING STATE (UPDATED FOR LOCAL 404) ---
+  // --- PAGE ROUTING STATE ---
   const [activeView, setActiveView] = useState<"home" | "about" | "404">(() => {
     if (typeof window === "undefined") return "home";
 
@@ -59,12 +59,22 @@ export default function App() {
     if (search.includes("404=true")) return "404";
 
     // 2. Check for bad local/direct paths (ignoring the root or the repo name)
-    // Adjust this array if you ever change your GitHub repo name!
     const validPaths = ["/", "/brutalist-portfolio", "/brutalist-portfolio/"];
     if (!validPaths.includes(path)) return "404";
 
     return "home";
   });
+
+  // --- DYNAMIC TAB TITLE LOGIC ---
+  useEffect(() => {
+    if (activeView === "home") {
+      document.title = "Samy Barsoum - Work";
+    } else if (activeView === "about") {
+      document.title = "Samy Barsoum - About";
+    } else if (activeView === "404") {
+      document.title = "404 - Transmission Lost";
+    }
+  }, [activeView]);
 
   // --- FORM STATE ---
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
