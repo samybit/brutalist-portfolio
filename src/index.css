@@ -113,4 +113,33 @@
   html {
     @apply font-mono scroll-smooth;
   }
+
+  /* --- BRUTALIST SCROLLBAR --- */
+
+  /* 1. Width of the entire scrollbar */
+  ::-webkit-scrollbar {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* 2. The track */
+  ::-webkit-scrollbar-track {
+    @apply bg-mainBrand/20 border-l-4 border-foreground;
+  }
+
+  /* 3. The thumb */
+  ::-webkit-scrollbar-thumb {
+    @apply bg-foreground border-l-4 border-foreground;
+  }
+
+  /* 4. Hover effect on the thumb */
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-mainBrand;
+  }
+
+  /* Firefox Support (Firefox doesn't support massive widths, but we can force the colors) */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: #000000 #FF336633;
+  }
 }
