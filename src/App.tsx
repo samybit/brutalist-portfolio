@@ -380,7 +380,7 @@ export default function App() {
                     type="submit"
                     size="lg"
                     disabled={formStatus === "submitting"}
-                    className="w-full h-20 mt-6 text-2xl font-black rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-bgBrand hover:text-mainBrand disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full h-20 mt-6 text-lg sm:text-xl md:text-2xl font-black rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-bgBrand hover:text-mainBrand disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {formStatus === "idle" && "SEND TRANSMISSION"}
                     {formStatus === "submitting" && "SENDING..."}
@@ -548,7 +548,7 @@ export default function App() {
             <h2 className="text-[150px] md:text-[250px] font-heading font-black leading-none text-foreground mb-4">
               4<span className="text-mainBrand">0</span>4
             </h2>
-            <div className="bg-foreground text-bgBrand px-6 py-2 font-sans font-black uppercase text-2xl md:text-4xl tracking-widest mb-8">
+            <div className="bg-foreground text-background px-6 py-2 font-sans font-black uppercase text-2xl md:text-4xl tracking-widest mb-8">
               Transmission Lost
             </div>
             <p className="font-sans text-xl md:text-2xl font-bold max-w-lg mb-12">
