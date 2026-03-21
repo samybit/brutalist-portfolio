@@ -161,7 +161,8 @@ export default function App() {
       {/* --- RESPONSIVE NAVBAR --- */}
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b-8 border-foreground pb-6 mb-12 md:mb-20 gap-6 sm:gap-0">
         <h1
-          className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter hover:text-mainBrand transition-colors"
+          className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter hover:text-mainBrand transition-colors glitch-hover"
+          data-text="Samy.Dev"
           onClick={routeHome}
         >
           Samy<span className="text-mainBrand">.</span>Dev
@@ -252,6 +253,19 @@ export default function App() {
                     DOWNLOAD CV
                   </a>
                 </Button>
+              </div>
+            </div>
+
+            {/* The Brutalist Marquee */}
+            <div className="w-full border-y-8 border-foreground bg-mainBrand text-white py-3 mb-32 overflow-hidden flex whitespace-nowrap -mx-8 px-8 md:mx-0 md:px-0">
+              <div className="animate-marquee inline-block font-heading font-black text-2xl md:text-3xl uppercase tracking-widest">
+                <span className="mx-6">/// OPEN TO FULL-TIME ROLES</span>
+                <span className="mx-6">/// AVAILABLE FOR FREELANCE</span>
+                {/* <span className="mx-6">/// NO APOLOGIES</span> */}
+
+                <span className="mx-6">/// OPEN TO FULL-TIME ROLES</span>
+                <span className="mx-6">/// AVAILABLE FOR FREELANCE</span>
+                {/* <span className="mx-6">/// NO APOLOGIES</span> */}
               </div>
             </div>
 
@@ -555,9 +569,14 @@ export default function App() {
             transition={{ duration: 0.4 }}
             className="flex flex-col items-center justify-center py-20 text-center"
           >
-            <h2 className="text-[150px] md:text-[250px] font-heading font-black leading-none text-foreground mb-4">
+
+            <h2
+              className="text-[150px] md:text-[250px] font-heading font-black leading-none text-foreground mb-4 glitch-hover cursor-default"
+              data-text="404"
+            >
               4<span className="text-mainBrand">0</span>4
             </h2>
+
             <div className="bg-foreground text-background px-6 py-2 font-sans font-black uppercase text-2xl md:text-4xl tracking-widest mb-8">
               Transmission Lost
             </div>
