@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import AnimatedCursor from "react-animated-cursor";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -115,8 +116,28 @@ export default function App() {
     setActiveView("home");
   };
 
+
+
   return (
     <div className="min-h-screen bg-bgBrand text-foreground p-8 selection:bg-mainBrand selection:text-white">
+      <AnimatedCursor
+        innerSize={20}
+        outerSize={0} /* We remove the trailing outer circle to keep it raw and mechanical */
+        color="255, 51, 102" /* Your mainBrand pink */
+        innerScale={1.5}
+        clickables={[
+          'a',
+          'input[type="text"]',
+          'input[type="email"]',
+          'button',
+          'textarea'
+        ]}
+        innerStyle={{
+          borderRadius: '0', /* Absolute square, no rounded corners */
+          border: '3px solid #000' /* Thick brutalist border */
+        }}
+      />
+
       {/* --- RESPONSIVE NAVBAR --- */}
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b-8 border-foreground pb-6 mb-12 md:mb-20 gap-6 sm:gap-0">
         <h1
@@ -145,8 +166,8 @@ export default function App() {
             href="#contact"
             onClick={(e) => {
               if (activeView !== "home") {
-                e.preventDefault(); 
-                routeHome(); 
+                e.preventDefault();
+                routeHome();
                 setTimeout(() => {
                   document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
                 }, 100);
