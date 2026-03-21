@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import AnimatedCursor from "react-animated-cursor";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -48,6 +48,12 @@ const projects = [
 ];
 
 export default function App() {
+  // --- FRAMER MOTION PARALLAX SETUP ---
+  const { scrollY } = useScroll();
+  // Moves the background UP aggressively by 500px as the user scrolls 500px.
+  // This ensures the bottom edge of the image slides up fast enough to be seen!
+  const yBackground = useTransform(scrollY, [0, 500], [0, -500]);
+
   // --- PAGE ROUTING STATE ---
   const [activeView, setActiveView] = useState<"home" | "about" | "404">(() => {
     if (typeof window === "undefined") return "home";
@@ -157,32 +163,8 @@ export default function App() {
     setActiveView("home");
   };
 
-  // ─────────────────────────────────────────────────────────────
-  // NGA-STYLE HERO SCROLL EFFECT
-  // The background image clips upward from the bottom as the user
-  // scrolls. Text uses mix-blend-mode: difference so it appears
-  // white over the dark image and automatically turns dark once
-  // the image has scrolled away and the light page bg is exposed.
-  // ─────────────────────────────────────────────────────────────
-  const heroRef = useRef<HTMLDivElement>(null);
-  const [clipBottom, setClipBottom] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!heroRef.current) return;
-      const heroHeight = heroRef.current.offsetHeight;
-      // 1-to-1 clip: image bottom rises as fast as user scrolls
-      const next = Math.max(0, Math.min(window.scrollY, heroHeight));
-      setClipBottom(next);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // sync on mount
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
-    <div className="min-h-screen bg-bgBrand text-foreground p-8 selection:bg-mainBrand selection:text-white">
+    <div className="min-h-screen bg-bgBrand text-foreground p-8 selection:bg-mainBrand selection:text-white overflow-x-hidden">
 
       {/* Custom cursor - Only render if on desktop device */}
       {isDesktop && (
@@ -207,7 +189,7 @@ export default function App() {
       )}
 
       {/* --- RESPONSIVE NAVBAR --- */}
-      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b-8 border-foreground pb-6 mb-12 md:mb-20 gap-6 sm:gap-0">
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b-8 border-foreground pb-6 mb-12 md:mb-20 gap-6 sm:gap-0 relative z-20">
         <h1
           className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter hover:text-mainBrand transition-colors glitch-hover"
           data-text="Samy.Dev"
@@ -272,71 +254,41 @@ export default function App() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4 }}
           >
-            {/* ── HERO with NGA Scroll Effect ── */}
-            <div
-              ref={heroRef}
-              className="relative mb-32"
-            // No isolation here — we WANT mix-blend-mode to composite
-            // against the real rendered page background below the image.
-            >
-              {/*
-               * Background image layer
-               * clip-path inset shrinks from the BOTTOM as the user scrolls,
-               * so the image "peels away" upward while the page bg is revealed.
-               *
-               * ⚠️  Replace "/hero-bg.jpg" with your actual image file path.
-               *     The dark gradient acts as a fallback if the file is missing.
-               */}
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 pointer-events-none overflow-hidden"
-                style={{
-                  clipPath: `inset(0 0 ${clipBottom}px 0)`,
-                  // Dark gradient fallback — shows if the image fails to load
-                  background: "linear-gradient(160deg, #0d0d0d 0%, #1c1c1c 55%, #0a0a0a 100%)",
-                }}
-              >
-                {/* Your hero background image — swap src for your file */}
-                <img
-                  src="/hero-bg.jpg"
-                  alt=""
-                  className="absolute inset-0 w-full h-full object-cover"
-                  // If the image doesn't load the gradient above shows instead
-                  onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
-                />
-                {/* Subtle dark veil so text stays legible over bright images */}
-                <div className="absolute inset-0 bg-black/45" />
+            {/* Hero Content */}
+            <div className="mb-32">
+
+              {/* --- TEXT & PARALLAX BACKGROUND BLOCK --- */}
+              <div className="relative">
+                {/* 1. The Clipping Mask for the Parallax Image */}
+                <div className="absolute -top-12 md:-top-20 left-[50%] -translate-x-1/2 w-[100vw] h-[calc(100%+3rem)] md:h-[calc(100%+5rem)] overflow-hidden z-0 pointer-events-none">
+                  {/* 2. The Moving Background Image using your custom file */}
+                  <motion.div
+                    style={{ y: yBackground }}
+                    className="absolute top-0 left-0 w-full h-full"
+                  >
+                    <img
+                      src={`${import.meta.env.BASE_URL}hero-bg.jpg`}
+                      alt="Hero Background"
+                      className="w-full h-full object-cover object-center"
+                    />
+                  </motion.div>
+                </div>
+
+                {/* 3. The Text Layer (Mix-Blend-Difference forces contrast colors) */}
+                <div className="relative z-10 mix-blend-difference text-white">
+                  <h2 className="text-6xl sm:text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-8 md:mb-10 break-words">
+                    Design <br /> Without <br /> <span className="italic text-mainBrand">Apology.</span>
+                  </h2>
+
+                  <p className="font-sans text-xl md:text-2xl max-w-xl font-bold mb-12 leading-tight">
+                    A developer building interfaces that demand attention through heavy borders and sharp typography.
+                  </p>
+                </div>
               </div>
+              {/* --- END TEXT & PARALLAX BLOCK --- */}
 
-              {/*
-               * Text layer — mix-blend-mode: difference + white color
-               * • Over the dark image  → white text visible ✓
-               * • Over the light page bg (after image clips away) → dark text ✓
-               * Buttons are OUTSIDE this div so they keep their own colours.
-               */}
-              <div
-                className="relative pt-20 pb-6"
-                style={{ mixBlendMode: "difference", color: "white" }}
-              >
-                <h2
-                  className="text-6xl sm:text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-8 md:mb-10 break-words"
-                  style={{ color: "inherit" }}
-                >
-                  Design <br /> Without <br />
-                  {/* Keep the italic accent — it will invert correctly with difference */}
-                  <span className="italic" style={{ color: "inherit" }}>Apology.</span>
-                </h2>
-
-                <p
-                  className="font-sans text-xl md:text-2xl max-w-xl font-bold mb-12 leading-tight"
-                  style={{ color: "inherit" }}
-                >
-                  A developer building interfaces that demand attention through heavy borders and sharp typography.
-                </p>
-              </div>
-
-              {/* Buttons sit below the blend div — unaffected by mix-blend-mode */}
-              <div className="relative flex flex-wrap gap-4 pb-20">
+              {/* 4. The Buttons (Not blended, sitting on top outside the parallax mask) */}
+              <div className="flex flex-wrap gap-4 relative z-20">
                 <Button
                   asChild
                   size="lg"
@@ -351,7 +303,7 @@ export default function App() {
                   variant="outline"
                   className="h-12 px-6 text-base font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-bgBrand hover:text-mainBrand"
                 >
-                  <a href="/cv.pdf" download="Samy_CV.pdf">
+                  <a href={`${import.meta.env.BASE_URL}cv.pdf`} download="Samy_CV.pdf">
                     DOWNLOAD CV
                   </a>
                 </Button>
