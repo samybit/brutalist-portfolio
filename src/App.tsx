@@ -53,7 +53,7 @@ export default function App() {
 
   // 1. Animates a clipping mask from the bottom up. 
   // At 0 scroll, 0% is hidden. At 600px scroll, 100% is hidden (cut).
-  const clipPath = useTransform(scrollY, [0, 600], ["inset(0% 0% 0% 0%)", "inset(0% 0% 100% 0%)"]);
+  const clipPath = useTransform(scrollY, [0, 600], ["inset(0% 0% 0% 0%)", "inset(0% 0% 115% 0%)"]);
 
   // 2. Parallax effect specifically for the background image inside the mask.
   const imageY = useTransform(scrollY, [0, 600], [0, -150]);
