@@ -265,7 +265,7 @@ export default function App() {
                 {/* 2. LAYER A: THE BASE TEXT (Solid Black + Pink) */}
                 <div className="relative z-10 pointer-events-none">
                   <h2 className="text-foreground text-6xl sm:text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-8 md:mb-10 break-words">
-                    Design <br /> Without <br /> <span className="italic text-mainBrand">Apology.</span>
+                    Design <br /> Without <br /> <span className="italic text-[#00CC99]">Apology.</span>
                   </h2>
 
                   <p className="text-foreground font-sans text-xl md:text-2xl max-w-xl font-bold mb-0 leading-tight">
