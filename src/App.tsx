@@ -245,8 +245,16 @@ export default function App() {
                 // If you right-clicked directly inside an input or textarea
                 if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) {
                   target.focus(); // Force the browser cursor back into the input
+
+                  // THE BYPASS: Temporarily convert email inputs to text inputs so the browser allows pasting
+                  const isEmail = target.getAttribute('type') === 'email';
+                  if (isEmail) target.setAttribute('type', 'text');
+
                   // Natively inject the text exactly where the cursor is resting
                   target.setRangeText(text, target.selectionStart || 0, target.selectionEnd || 0, 'end');
+
+                  // Revert it back to an email input instantly
+                  if (isEmail) target.setAttribute('type', 'email');
                 }
               } catch (e) {
                 console.warn("Paste permission denied or not supported.");
