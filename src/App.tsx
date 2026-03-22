@@ -176,7 +176,8 @@ export default function App() {
       )}
 
       {/* --- RESPONSIVE NAVBAR --- */}
-      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b-8 border-foreground pb-6 mb-12 md:mb-20 gap-6 sm:gap-0 relative z-30">
+      {/* 1. THE HEADER FIX: Dynamically removing margin-bottom on the Home view so the picture seamlessly touches the border! */}
+      <header className={`flex flex-col sm:flex-row justify-between items-start sm:items-end border-b-8 border-foreground pb-6 gap-6 sm:gap-0 relative z-30 ${activeView === "home" ? "mb-0" : "mb-12 md:mb-20"}`}>
         <h1
           className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter hover:text-mainBrand transition-colors glitch-hover"
           data-text="Samy.Dev"
@@ -242,13 +243,14 @@ export default function App() {
             <div className="mb-32">
 
               {/* --- TEXT & PARALLAX BACKGROUND BLOCK --- */}
-              <div className="relative">
+              {/* Added natural pt-12 md:pt-20 here to replace the missing header margin! */}
+              <div className="relative pt-12 md:pt-20 pb-16">
 
                 {/* 1. THE FULL-WIDTH IMAGE MASK */}
-                {/* Fixed to top-0 so it NEVER bleeds behind the navbar. */}
+                {/* Now identically sized (h-full) to the text mask so the clip paths sync pixel-perfectly */}
                 <motion.div
                   style={{ clipPath }}
-                  className="absolute top-0 left-[50%] -translate-x-1/2 w-[100vw] h-[120%] z-0 pointer-events-none"
+                  className="absolute top-0 left-[50%] -translate-x-1/2 w-[100vw] h-full z-0 pointer-events-none"
                 >
                   <motion.img
                     style={{ y: imageY }}
@@ -256,13 +258,11 @@ export default function App() {
                     alt="Hero Background"
                     className="absolute top-0 left-0 w-full h-[150%] object-cover object-center"
                   />
-                  {/* Subtle dark overlay ensures white text is always readable over the photo */}
                   <div className="absolute inset-0 bg-black/40 w-full h-[150%]"></div>
                 </motion.div>
 
                 {/* 2. LAYER A: THE BASE TEXT (Solid Black + Pink) */}
-                {/* Sits completely naturally in the grid. Zero 100vw math applied. */}
-                <div className="relative z-10 pointer-events-none py-8">
+                <div className="relative z-10 pointer-events-none">
                   <h2 className="text-foreground text-6xl sm:text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-8 md:mb-10 break-words">
                     Design <br /> Without <br /> <span className="italic text-mainBrand">Apology.</span>
                   </h2>
@@ -273,10 +273,10 @@ export default function App() {
                 </div>
 
                 {/* 3. LAYER B: THE CLIPPED OVERLAY TEXT (Solid White + Pink) */}
-                {/* Flawlessly overlays Layer A. Clipped identically to the Image so they disappear together! */}
+                {/* pt-12 md:pt-20 matches the parent container's padding to perfectly overlap LAYER A */}
                 <motion.div
                   style={{ clipPath }}
-                  className="absolute top-0 left-0 w-full h-full z-20 pointer-events-none py-8"
+                  className="absolute top-0 left-0 w-full h-full z-20 pointer-events-none pt-12 md:pt-20"
                 >
                   <h2 className="text-white text-6xl sm:text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-8 md:mb-10 break-words">
                     Design <br /> Without <br /> <span className="italic text-mainBrand">Apology.</span>
@@ -291,8 +291,7 @@ export default function App() {
               {/* --- END TEXT & PARALLAX BLOCK --- */}
 
               {/* 4. The Buttons */}
-              {/* Pushed slightly down with mt-12 so they sit nicely below the background image edge */}
-              <div className="flex flex-wrap gap-4 relative z-30 mt-12">
+              <div className="flex flex-wrap gap-4 relative z-30 mt-8">
                 <Button
                   asChild
                   size="lg"
@@ -319,10 +318,8 @@ export default function App() {
               <div className="animate-marquee inline-block font-heading font-black text-2xl md:text-3xl uppercase tracking-widest">
                 <span className="mx-6">/// OPEN TO FULL-TIME ROLES</span>
                 <span className="mx-6">/// AVAILABLE FOR FREELANCE</span>
-                <span className="mx-6">/// NO APOLOGIES</span>
                 <span className="mx-6">/// OPEN TO FULL-TIME ROLES</span>
                 <span className="mx-6">/// AVAILABLE FOR FREELANCE</span>
-                <span className="mx-6">/// NO APOLOGIES</span>
               </div>
             </div>
 
