@@ -247,10 +247,11 @@ export default function App() {
               <div className="relative pt-12 md:pt-20 pb-16">
 
                 {/* 1. THE FULL-WIDTH IMAGE MASK */}
-                {/* Now identically sized (h-full) to the text mask so the clip paths sync pixel-perfectly */}
+                {/* identically sized (h-full) to the text mask so the clip paths sync pixel-perfectly */}
                 <motion.div
                   style={{ clipPath }}
-                  className="absolute top-0 left-[50%] -translate-x-1/2 w-[100vw] h-full z-0 pointer-events-none"
+                  // from w-[100vw] to w-[102vw] to bleed past the edges and kill the 1px gap
+                  className="absolute top-0 left-[50%] -translate-x-1/2 w-[102vw] h-full z-0 pointer-events-none"
                 >
                   <motion.img
                     style={{ y: imageY }}
