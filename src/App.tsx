@@ -205,14 +205,13 @@ export default function App() {
         />
       )}
 
-      {/* --- CONTEXT MENU --- */}
+      {/* --- BRUTALIST CONTEXT MENU --- */}
       {contextMenu.show && (
         <motion.div
           initial={{ opacity: 0, scale: 0.9, transformOrigin: "top left" }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.1 }}
-          // Fixed positioning ignores scroll, ensuring it snaps exactly to the mouse
-          className="fixed z-[100] bg-white border-4 border-foreground shadow-brutal w-60 flex flex-col font-sans font-black uppercase text-sm"
+          className="fixed z-[100] bg-white border-4 border-foreground shadow-brutal w-64 flex flex-col font-sans font-black uppercase text-sm"
           style={{ top: contextMenu.y, left: contextMenu.x }}
         >
           {/* Menu Header */}
@@ -220,8 +219,69 @@ export default function App() {
             SYSTEM_MENU
           </div>
 
+          {/* COPY ACTION */}
           <button
-            onClick={() => navigator.clipboard.writeText(window.location.href)}
+            onClick={() => {
+              const selectedText = window.getSelection()?.toString();
+              if (selectedText) navigator.clipboard.writeText(selectedText);
+              setContextMenu({ show: false, x: 0, y: 0 });
+            }}
+            className="px-4 py-3 text-left hover:bg-mainBrand hover:text-white border-b-4 border-foreground transition-colors w-full flex items-center justify-between group"
+          >
+            <div className="flex items-center gap-3">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="square" strokeLinejoin="miter" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+              <span>Copy</span>
+            </div>
+            <span className="opacity-0 group-hover:opacity-100 text-white font-mono text-xs">CTRL+C</span>
+          </button>
+
+          {/* PASTE ACTION */}
+          <button
+            onClick={async () => {
+              try {
+                const text = await navigator.clipboard.readText();
+                const activeEl = document.activeElement as HTMLInputElement | HTMLTextAreaElement;
+                // If they are focused on an input or textarea, paste the text in!
+                if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
+                  const start = activeEl.selectionStart || 0;
+                  const end = activeEl.selectionEnd || 0;
+                  activeEl.value = activeEl.value.slice(0, start) + text + activeEl.value.slice(end);
+                }
+              } catch (e) {
+                console.warn("Paste permission denied or not supported.");
+              }
+              setContextMenu({ show: false, x: 0, y: 0 });
+            }}
+            className="px-4 py-3 text-left hover:bg-mainBrand hover:text-white border-b-4 border-foreground transition-colors w-full flex items-center justify-between group"
+          >
+            <div className="flex items-center gap-3">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="square" strokeLinejoin="miter" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+              <span>Paste</span>
+            </div>
+            <span className="opacity-0 group-hover:opacity-100 text-white font-mono text-xs">CTRL+V</span>
+          </button>
+
+          {/* INSPECT ACTION */}
+          <button
+            onClick={() => {
+              alert("/// SECURITY OVERRIDE /// \n\nINSPECT PROTOCOL CANNOT BE INITIATED VIA SCRIPT. \n\nMANUALLY PRESS [F12] OR [CTRL+SHIFT+I] TO ACCESS SOURCE.");
+              setContextMenu({ show: false, x: 0, y: 0 });
+            }}
+            className="px-4 py-3 text-left hover:bg-mainBrand hover:text-white border-b-4 border-foreground transition-colors w-full flex items-center justify-between group"
+          >
+            <div className="flex items-center gap-3">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="square" strokeLinejoin="miter" strokeWidth="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+              <span>Inspect</span>
+            </div>
+            <span className="opacity-0 group-hover:opacity-100 text-white font-mono text-xs">F12</span>
+          </button>
+
+          {/* EXISTING ACTIONS */}
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(window.location.href);
+              setContextMenu({ show: false, x: 0, y: 0 });
+            }}
             className="px-4 py-3 text-left hover:bg-mainBrand hover:text-white border-b-4 border-foreground transition-colors w-full flex justify-between group"
           >
             <span>Copy Coordinates</span> <span className="opacity-0 group-hover:opacity-100 text-white">&rarr;</span>
@@ -231,6 +291,7 @@ export default function App() {
             onClick={() => {
               setActiveView("home");
               setTimeout(() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }), 100);
+              setContextMenu({ show: false, x: 0, y: 0 });
             }}
             className="px-4 py-3 text-left hover:bg-mainBrand hover:text-white border-b-4 border-foreground transition-colors w-full flex justify-between group"
           >
