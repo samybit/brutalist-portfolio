@@ -90,6 +90,36 @@ export default function App() {
     return () => mediaQuery.removeEventListener("change", checkPointer);
   }, []);
 
+  // --- CUSTOM BRUTALIST CONTEXT MENU ---
+  const [contextMenu, setContextMenu] = useState<{ show: boolean, x: number, y: number }>({ show: false, x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+
+      // Calculate position so the menu doesn't bleed off the edge of the screen
+      const menuWidth = 240;
+      const menuHeight = 220;
+      const x = e.clientX + menuWidth > window.innerWidth ? e.clientX - menuWidth : e.clientX;
+      const y = e.clientY + menuHeight > window.innerHeight ? e.clientY - menuHeight : e.clientY;
+
+      setContextMenu({ show: true, x, y });
+    };
+
+    const handleClick = () => {
+      if (contextMenu.show) setContextMenu({ show: false, x: 0, y: 0 });
+    };
+
+    // Attach listeners
+    window.addEventListener("contextmenu", handleContextMenu);
+    window.addEventListener("click", handleClick);
+
+    return () => {
+      window.removeEventListener("contextmenu", handleContextMenu);
+      window.removeEventListener("click", handleClick);
+    };
+  }, [contextMenu.show]);
+
   // --- DYNAMIC TAB TITLE LOGIC ---
   useEffect(() => {
     if (activeView === "home") {
@@ -173,6 +203,54 @@ export default function App() {
           clickables={['a', 'input[type="text"]', 'input[type="email"]', 'button', 'textarea', 'label']}
           innerStyle={{ borderRadius: '0', border: '3px solid #000' }}
         />
+      )}
+
+      {/* --- CONTEXT MENU --- */}
+      {contextMenu.show && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9, transformOrigin: "top left" }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.1 }}
+          // Fixed positioning ignores scroll, ensuring it snaps exactly to the mouse
+          className="fixed z-[100] bg-white border-4 border-foreground shadow-brutal w-60 flex flex-col font-sans font-black uppercase text-sm"
+          style={{ top: contextMenu.y, left: contextMenu.x }}
+        >
+          {/* Menu Header */}
+          <div className="bg-foreground text-background px-4 py-2 text-xs tracking-widest cursor-default">
+            SYSTEM_MENU
+          </div>
+
+          <button
+            onClick={() => navigator.clipboard.writeText(window.location.href)}
+            className="px-4 py-3 text-left hover:bg-mainBrand hover:text-white border-b-4 border-foreground transition-colors w-full flex justify-between group"
+          >
+            <span>Copy Coordinates</span> <span className="opacity-0 group-hover:opacity-100 text-white">&rarr;</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveView("home");
+              setTimeout(() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }), 100);
+            }}
+            className="px-4 py-3 text-left hover:bg-mainBrand hover:text-white border-b-4 border-foreground transition-colors w-full flex justify-between group"
+          >
+            <span>Initiate Contact</span> <span className="opacity-0 group-hover:opacity-100 text-white">&rarr;</span>
+          </button>
+
+          <button
+            onClick={() => window.open("https://github.com/samybit", "_blank")}
+            className="px-4 py-3 text-left hover:bg-mainBrand hover:text-white border-b-4 border-foreground transition-colors w-full flex justify-between group"
+          >
+            <span>Access GitHub</span> <span className="opacity-0 group-hover:opacity-100 text-white">&rarr;</span>
+          </button>
+
+          <button
+            onClick={() => setContextMenu({ show: false, x: 0, y: 0 })}
+            className="px-4 py-3 text-left hover:bg-bgBrand hover:text-mainBrand transition-colors w-full flex justify-between group text-foreground/50"
+          >
+            <span>Abort Operation</span> <span className="opacity-0 group-hover:opacity-100 text-mainBrand">X</span>
+          </button>
+        </motion.div>
       )}
 
       {/* --- RESPONSIVE NAVBAR --- */}
