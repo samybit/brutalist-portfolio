@@ -48,11 +48,15 @@ const projects = [
 ];
 
 export default function App() {
-  // --- FRAMER MOTION PARALLAX SETUP ---
+  // --- FRAMER MOTION CLIP-PATH SETUP ---
   const { scrollY } = useScroll();
-  // Moves the background UP aggressively by 500px as the user scrolls 500px.
-  // This ensures the bottom edge of the image slides up fast enough to be seen!
-  const yBackground = useTransform(scrollY, [0, 500], [0, -500]);
+
+  // 1. Animates a clipping mask from the bottom up. 
+  // At 0 scroll, 0% is hidden. At 600px scroll, 100% is hidden (cut).
+  const clipPath = useTransform(scrollY, [0, 600], ["inset(0% 0% 0% 0%)", "inset(0% 0% 100% 0%)"]);
+
+  // 2. Parallax effect specifically for the background image inside the mask.
+  const imageY = useTransform(scrollY, [0, 600], [0, -150]);
 
   // --- PAGE ROUTING STATE ---
   const [activeView, setActiveView] = useState<"home" | "about" | "404">(() => {
@@ -61,10 +65,8 @@ export default function App() {
     const search = window.location.search;
     const path = window.location.pathname;
 
-    // 1. Check for GitHub Pages redirect
     if (search.includes("404=true")) return "404";
 
-    // 2. Check for bad local/direct paths (ignoring the root or the repo name)
     const validPaths = ["/", "/brutalist-portfolio", "/brutalist-portfolio/"];
     if (!validPaths.includes(path)) return "404";
 
@@ -75,15 +77,13 @@ export default function App() {
   const [isDesktop, setIsDesktop] = useState(true);
 
   useEffect(() => {
-    // Check if the primary input mechanism can hover and is a precise pointer (a mouse)
     const checkPointer = () => {
       const hasMouse = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
       setIsDesktop(hasMouse);
     };
 
-    checkPointer(); // Check immediately on load
+    checkPointer();
 
-    // Listen for hardware changes (like plugging/unplugging a mouse on a tablet)
     const mediaQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
     mediaQuery.addEventListener("change", checkPointer);
 
@@ -131,7 +131,6 @@ export default function App() {
     setErrors({});
     setFormStatus("submitting");
 
-    // WEB3FORMS
     formData.append("access_key", "fa441d0e-c6d1-41e5-9fd2-7e80b5658873");
 
     try {
@@ -155,7 +154,6 @@ export default function App() {
   };
 
   const routeHome = () => {
-    // Determine the base path depending on the environment
     const basePath = window.location.pathname.startsWith('/brutalist-portfolio')
       ? '/brutalist-portfolio/'
       : '/';
@@ -166,30 +164,19 @@ export default function App() {
   return (
     <div className="min-h-screen bg-bgBrand text-foreground p-8 selection:bg-mainBrand selection:text-white overflow-x-hidden">
 
-      {/* Custom cursor - Only render if on desktop device */}
       {isDesktop && (
         <AnimatedCursor
           innerSize={20}
           outerSize={0}
           color="255, 51, 102"
           innerScale={1.5}
-          clickables={[
-            'a',
-            'input[type="text"]',
-            'input[type="email"]',
-            'button',
-            'textarea',
-            'label'
-          ]}
-          innerStyle={{
-            borderRadius: '0',
-            border: '3px solid #000'
-          }}
+          clickables={['a', 'input[type="text"]', 'input[type="email"]', 'button', 'textarea', 'label']}
+          innerStyle={{ borderRadius: '0', border: '3px solid #000' }}
         />
       )}
 
       {/* --- RESPONSIVE NAVBAR --- */}
-      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b-8 border-foreground pb-6 mb-12 md:mb-20 gap-6 sm:gap-0 relative z-20">
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b-8 border-foreground pb-6 mb-12 md:mb-20 gap-6 sm:gap-0 relative z-30">
         <h1
           className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter hover:text-mainBrand transition-colors glitch-hover"
           data-text="Samy.Dev"
@@ -219,9 +206,7 @@ export default function App() {
               if (activeView !== "home") {
                 e.preventDefault();
                 routeHome();
-                setTimeout(() => {
-                  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-                }, 100);
+                setTimeout(() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }), 100);
               }
             }}
             className="hover:text-mainBrand underline decoration-4 underline-offset-4 transition-colors text-foreground"
@@ -229,7 +214,6 @@ export default function App() {
             Contact
           </a>
 
-          {/* Legacy Portfolio Link */}
           <a
             href="https://my-portfolio-seven-beta-98.vercel.app/"
             target="_blank"
@@ -259,36 +243,56 @@ export default function App() {
 
               {/* --- TEXT & PARALLAX BACKGROUND BLOCK --- */}
               <div className="relative">
-                {/* 1. The Clipping Mask for the Parallax Image */}
-                <div className="absolute -top-12 md:-top-20 left-[50%] -translate-x-1/2 w-[100vw] h-[calc(100%+3rem)] md:h-[calc(100%+5rem)] overflow-hidden z-0 pointer-events-none">
-                  {/* 2. The Moving Background Image using your custom file */}
-                  <motion.div
-                    style={{ y: yBackground }}
-                    className="absolute top-0 left-0 w-full h-full"
-                  >
-                    <img
-                      src={`${import.meta.env.BASE_URL}hero-bg.jpg`}
-                      alt="Hero Background"
-                      className="w-full h-full object-cover object-center"
-                    />
-                  </motion.div>
-                </div>
 
-                {/* 3. The Text Layer (Mix-Blend-Difference forces contrast colors) */}
-                <div className="relative z-10 mix-blend-difference text-white">
-                  <h2 className="text-6xl sm:text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-8 md:mb-10 break-words">
+                {/* 1. THE FULL-WIDTH IMAGE MASK */}
+                {/* Fixed to top-0 so it NEVER bleeds behind the navbar. */}
+                <motion.div
+                  style={{ clipPath }}
+                  className="absolute top-0 left-[50%] -translate-x-1/2 w-[100vw] h-[120%] z-0 pointer-events-none"
+                >
+                  <motion.img
+                    style={{ y: imageY }}
+                    src={`${import.meta.env.BASE_URL}hero-bg.jpg`}
+                    alt="Hero Background"
+                    className="absolute top-0 left-0 w-full h-[150%] object-cover object-center"
+                  />
+                  {/* Subtle dark overlay ensures white text is always readable over the photo */}
+                  <div className="absolute inset-0 bg-black/40 w-full h-[150%]"></div>
+                </motion.div>
+
+                {/* 2. LAYER A: THE BASE TEXT (Solid Black + Pink) */}
+                {/* Sits completely naturally in the grid. Zero 100vw math applied. */}
+                <div className="relative z-10 pointer-events-none py-8">
+                  <h2 className="text-foreground text-6xl sm:text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-8 md:mb-10 break-words">
                     Design <br /> Without <br /> <span className="italic text-mainBrand">Apology.</span>
                   </h2>
 
-                  <p className="font-sans text-xl md:text-2xl max-w-xl font-bold mb-12 leading-tight">
+                  <p className="text-foreground font-sans text-xl md:text-2xl max-w-xl font-bold mb-0 leading-tight">
                     A developer building interfaces that demand attention through heavy borders and sharp typography.
                   </p>
                 </div>
+
+                {/* 3. LAYER B: THE CLIPPED OVERLAY TEXT (Solid White + Pink) */}
+                {/* Flawlessly overlays Layer A. Clipped identically to the Image so they disappear together! */}
+                <motion.div
+                  style={{ clipPath }}
+                  className="absolute top-0 left-0 w-full h-full z-20 pointer-events-none py-8"
+                >
+                  <h2 className="text-white text-6xl sm:text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-8 md:mb-10 break-words">
+                    Design <br /> Without <br /> <span className="italic text-mainBrand">Apology.</span>
+                  </h2>
+
+                  <p className="text-white font-sans text-xl md:text-2xl max-w-xl font-bold mb-0 leading-tight">
+                    A developer building interfaces that demand attention through heavy borders and sharp typography.
+                  </p>
+                </motion.div>
+
               </div>
               {/* --- END TEXT & PARALLAX BLOCK --- */}
 
-              {/* 4. The Buttons (Not blended, sitting on top outside the parallax mask) */}
-              <div className="flex flex-wrap gap-4 relative z-20">
+              {/* 4. The Buttons */}
+              {/* Pushed slightly down with mt-12 so they sit nicely below the background image edge */}
+              <div className="flex flex-wrap gap-4 relative z-30 mt-12">
                 <Button
                   asChild
                   size="lg"
@@ -309,18 +313,16 @@ export default function App() {
                 </Button>
               </div>
             </div>
-            {/* ── End Hero ── */}
 
             {/* The Brutalist Marquee */}
             <div className="border-y-8 border-foreground bg-mainBrand text-white py-3 mb-32 overflow-hidden flex whitespace-nowrap -mx-8 md:mx-0">
               <div className="animate-marquee inline-block font-heading font-black text-2xl md:text-3xl uppercase tracking-widest">
                 <span className="mx-6">/// OPEN TO FULL-TIME ROLES</span>
                 <span className="mx-6">/// AVAILABLE FOR FREELANCE</span>
-                {/* <span className="mx-6">/// NO APOLOGIES</span> */}
-
+                <span className="mx-6">/// NO APOLOGIES</span>
                 <span className="mx-6">/// OPEN TO FULL-TIME ROLES</span>
                 <span className="mx-6">/// AVAILABLE FOR FREELANCE</span>
-                {/* <span className="mx-6">/// NO APOLOGIES</span> */}
+                <span className="mx-6">/// NO APOLOGIES</span>
               </div>
             </div>
 
