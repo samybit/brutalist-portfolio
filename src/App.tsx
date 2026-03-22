@@ -256,9 +256,9 @@ export default function App() {
                     style={{ y: imageY }}
                     src={`${import.meta.env.BASE_URL}hero-bg.jpg`}
                     alt="Hero Background"
-                    className="absolute top-0 left-0 w-full h-[150%] object-cover object-center"
+                    className="absolute -top-[25%] left-0 w-full h-[150%] object-cover object-center"
                   />
-                  <div className="absolute inset-0 bg-black/40 w-full h-[150%]"></div>
+                  <div className="absolute -top-[25%] left-0 bg-black/30 w-full h-[150%]"></div>
                 </motion.div>
 
                 {/* 2. LAYER A: THE BASE TEXT (Solid Black + Pink) */}
