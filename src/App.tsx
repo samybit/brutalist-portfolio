@@ -485,9 +485,11 @@ export default function App() {
                   </div>
 
                   <div className="flex flex-wrap gap-6 font-sans font-bold uppercase underline decoration-4 underline-offset-4 text-xl">
-                    <a href="https://upwork.com/freelancers/YOUR_PROFILE" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">Upwork</a>
-                    <a href="https://khamsat.com/user/YOUR_PROFILE" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">Khamsat</a>
-                    <a href="https://mostaql.com/u/YOUR_PROFILE" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">Mostaql</a>
+                    <a href="https://www.upwork.com/freelancers/~01bcf00bfe590a5331" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">Upwork</a>
+                    <a href="https://khamsat.com/user/samy-b" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">Khamsat</a>
+                    <a href="https://mostaql.com/u/Samy_01" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">Mostaql</a>
+                    <a href="https://contra.com/samy_barsoum_akavah3d/work?r=samy_barsoum_akavah3d" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">Contra</a>
+                    <a href="https://www.linkedin.com/in/samybit" target="_blank" rel="noreferrer" className="hover:text-mainBrand transition-colors">LinkedIn</a>
                   </div>
                 </motion.div>
 
