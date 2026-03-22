@@ -91,7 +91,7 @@ export default function App() {
   }, []);
 
   // --- CUSTOM BRUTALIST CONTEXT MENU ---
-  const [contextMenu, setContextMenu] = useState<{ show: boolean, x: number, y: number }>({ show: false, x: 0, y: 0 });
+  const [contextMenu, setContextMenu] = useState<{ show: boolean, x: number, y: number, target?: HTMLElement | null }>({ show: false, x: 0, y: 0 });
 
   useEffect(() => {
     const handleContextMenu = (e: MouseEvent) => {
@@ -103,7 +103,7 @@ export default function App() {
       const x = e.clientX + menuWidth > window.innerWidth ? e.clientX - menuWidth : e.clientX;
       const y = e.clientY + menuHeight > window.innerHeight ? e.clientY - menuHeight : e.clientY;
 
-      setContextMenu({ show: true, x, y });
+      setContextMenu({ show: true, x, y, target: e.target as HTMLElement });
     };
 
     const handleClick = () => {
@@ -240,12 +240,13 @@ export default function App() {
             onClick={async () => {
               try {
                 const text = await navigator.clipboard.readText();
-                const activeEl = document.activeElement as HTMLInputElement | HTMLTextAreaElement;
-                // If they are focused on an input or textarea, paste the text in!
-                if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
-                  const start = activeEl.selectionStart || 0;
-                  const end = activeEl.selectionEnd || 0;
-                  activeEl.value = activeEl.value.slice(0, start) + text + activeEl.value.slice(end);
+                const target = contextMenu.target as HTMLInputElement | HTMLTextAreaElement;
+
+                // If you right-clicked directly inside an input or textarea
+                if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) {
+                  target.focus(); // Force the browser cursor back into the input
+                  // Natively inject the text exactly where the cursor is resting
+                  target.setRangeText(text, target.selectionStart || 0, target.selectionEnd || 0, 'end');
                 }
               } catch (e) {
                 console.warn("Paste permission denied or not supported.");
