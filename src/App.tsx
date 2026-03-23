@@ -198,7 +198,8 @@ export default function App() {
         <AnimatedCursor
           innerSize={20}
           outerSize={0}
-          color="255, 51, 102"
+          // Dynamically switch to green (0, 204, 153) when the menu is open, otherwise stay pink (255, 51, 102)
+          color={contextMenu.show ? "0, 204, 153" : "255, 51, 102"}
           innerScale={1.5}
           clickables={['a', 'input[type="text"]', 'input[type="email"]', 'button', 'textarea', 'label']}
           innerStyle={{ borderRadius: '0', border: '3px solid #000' }}
