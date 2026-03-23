@@ -491,13 +491,15 @@ export default function App() {
               </div>
             </div>
 
-            {/* The Brutalist Marquee */}
-            <div className="border-y-8 border-foreground bg-mainBrand text-white py-3 mb-32 overflow-hidden flex whitespace-nowrap -mx-8 md:mx-0">
-              <div className="animate-marquee inline-block font-heading font-black text-2xl md:text-3xl uppercase tracking-widest">
-                <span className="mx-6">/// OPEN TO FULL-TIME ROLES</span>
-                <span className="mx-6">/// AVAILABLE FOR FREELANCE</span>
-                <span className="mx-6">/// OPEN TO FULL-TIME ROLES</span>
-                <span className="mx-6">/// AVAILABLE FOR FREELANCE</span>
+            {/* Brutalist Marquee */}
+            <div className="group border-y-8 border-foreground bg-mainBrand text-white py-3 mb-32 overflow-hidden flex whitespace-nowrap -mx-8 md:mx-0">
+              <div className="animate-marquee group-hover:[animation-play-state:paused] inline-block font-heading font-black text-2xl md:text-3xl uppercase tracking-widest">
+                <span className="mx-6">/// AVAILABLE · OPEN TO WORK · LET'S TALK</span>
+                <span className="mx-6">/// AVAILABLE · OPEN TO WORK · LET'S TALK</span>
+                <span className="mx-6">/// AVAILABLE · OPEN TO WORK · LET'S TALK</span>
+                <span className="mx-6">/// AVAILABLE · OPEN TO WORK · LET'S TALK</span>
+                <span className="mx-6">/// AVAILABLE · OPEN TO WORK · LET'S TALK</span>
+                <span className="mx-6">/// AVAILABLE · OPEN TO WORK · LET'S TALK</span>
               </div>
             </div>
 
