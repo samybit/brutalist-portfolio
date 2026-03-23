@@ -228,7 +228,7 @@ export default function App() {
           clickables={['a', 'input[type="text"]', 'input[type="email"]', 'button', 'textarea', 'label']}
           innerStyle={{
             borderRadius: '0',
-            border: '3px solid #000',
+            outline: '3px solid #000', // Outline prevents the background color from bleeding through the anti-aliasing.
             backgroundColor: 'var(--cursor-color)' // Locked to the CSS Variable
           }}
         />
