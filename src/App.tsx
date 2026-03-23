@@ -357,10 +357,10 @@ export default function App() {
       <header className={`flex flex-col sm:flex-row justify-between items-start sm:items-end border-b-8 border-foreground pb-6 gap-6 sm:gap-0 relative z-30 ${activeView === "home" ? "mb-0" : "mb-12 md:mb-20"}`}>
         <h1
           className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter hover:text-mainBrand transition-colors glitch-hover"
-          data-text="Samy.Dev"
+          data-text="Samy B. Samir"
           onClick={routeHome}
         >
-          Samy<span className="text-mainBrand">.</span>Dev
+          Samy B<span className="text-mainBrand">.</span> Samir
         </h1>
 
         <nav className="flex flex-wrap gap-4 sm:gap-6 font-sans font-bold uppercase text-base w-full sm:w-auto border-t-4 border-foreground pt-4 sm:border-none sm:pt-0">
