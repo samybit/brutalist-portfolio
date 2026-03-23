@@ -90,6 +90,7 @@ export default function App() {
     return () => mediaQuery.removeEventListener("change", checkPointer);
   }, []);
 
+
   // --- CUSTOM BRUTALIST CONTEXT MENU ---
   const [contextMenu, setContextMenu] = useState<{ show: boolean, x: number, y: number, target?: HTMLElement | null }>({ show: false, x: 0, y: 0 });
 
@@ -119,6 +120,19 @@ export default function App() {
       window.removeEventListener("click", handleClick);
     };
   }, [contextMenu.show]);
+
+
+  // --- INSTANT CURSOR COLOR SYNC ---
+  // Toggles a class on the document body to force the CSS variable to update instantly, 
+  // bypassing the cursor library's sleeping animation loop.
+  useEffect(() => {
+    if (contextMenu.show) {
+      document.body.classList.add("menu-open");
+    } else {
+      document.body.classList.remove("menu-open");
+    }
+  }, [contextMenu.show]);
+
 
   // --- DYNAMIC TAB TITLE LOGIC ---
   useEffect(() => {
@@ -194,15 +208,29 @@ export default function App() {
   return (
     <div className="min-h-screen bg-bgBrand text-foreground p-8 selection:bg-mainBrand selection:text-white overflow-x-hidden">
 
+      {/* --- CSS VARIABLE INJECTION --- */}
+      {/* browser instantly change the cursor color based on this math, entirely ignoring Javascript */}
+      <style>{`
+        :root {
+          --cursor-color: #FF3366;
+        }
+        body.menu-open {
+          --cursor-color: #00CC99 !important;
+        }
+      `}</style>
+
       {isDesktop && (
         <AnimatedCursor
           innerSize={20}
           outerSize={0}
-          // Dynamically switch to green (0, 204, 153) when the menu is open, otherwise stay pink (255, 51, 102)
-          color={contextMenu.show ? "0, 204, 153" : "255, 51, 102"}
+          color="255, 51, 102"
           innerScale={1.5}
           clickables={['a', 'input[type="text"]', 'input[type="email"]', 'button', 'textarea', 'label']}
-          innerStyle={{ borderRadius: '0', border: '3px solid #000' }}
+          innerStyle={{
+            borderRadius: '0',
+            border: '3px solid #000',
+            backgroundColor: 'var(--cursor-color)' // Locked to the CSS Variable
+          }}
         />
       )}
 
@@ -325,7 +353,7 @@ export default function App() {
       )}
 
       {/* --- RESPONSIVE NAVBAR --- */}
-      {/* 1. THE HEADER FIX: Dynamically removing margin-bottom on the Home view so the picture seamlessly touches the border! */}
+      {/* HEADER FIX: Dynamically removing margin-bottom on the Home view so the picture seamlessly touches the border! */}
       <header className={`flex flex-col sm:flex-row justify-between items-start sm:items-end border-b-8 border-foreground pb-6 gap-6 sm:gap-0 relative z-30 ${activeView === "home" ? "mb-0" : "mb-12 md:mb-20"}`}>
         <h1
           className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter hover:text-mainBrand transition-colors glitch-hover"
@@ -392,7 +420,7 @@ export default function App() {
             <div className="mb-32">
 
               {/* --- TEXT & PARALLAX BACKGROUND BLOCK --- */}
-              {/* Added natural pt-12 md:pt-20 here to replace the missing header margin! */}
+              {/* natural pt-12 md:pt-20 to replace the missing header margin! */}
               <div className="relative pt-12 md:pt-20 pb-16">
 
                 {/* 1. THE FULL-WIDTH IMAGE MASK */}
