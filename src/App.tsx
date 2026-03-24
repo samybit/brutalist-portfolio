@@ -829,6 +829,17 @@ export default function App() {
           </motion.div>
         )}
 
+        {/* --- FOOTER --- */}
+        <footer className="mt-32 border-t-8 border-foreground pt-8 pb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <p className="font-sans font-black uppercase text-lg md:text-xl max-w-md leading-tight">
+            "Anxiety is the dizziness of freedom." <br />
+            <span className="text-mainBrand">— Søren Kierkegaard</span>
+          </p>
+          <div className="bg-foreground text-background px-6 py-3 font-heading font-black uppercase text-xl tracking-widest cursor-default hover:bg-mainBrand transition-colors">
+            © {new Date().getFullYear()} SAMY
+          </div>
+        </footer>
+
       </main>
 
     </div>
