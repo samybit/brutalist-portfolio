@@ -435,7 +435,7 @@ export default function App() {
                 >
                   <motion.img
                     style={{ y: imageY }}
-                    src={`${import.meta.env.BASE_URL}hero-bg2.jpg`}
+                    src={`${import.meta.env.BASE_URL}hero-bg.jpg`}
                     alt="Hero Background"
                     className="absolute -top-[25%] left-0 w-full h-[150%] object-cover object-center"
                   />
@@ -449,7 +449,7 @@ export default function App() {
                   </h2>
 
                   <p className="text-foreground font-sans text-xl md:text-2xl max-w-xl font-bold mb-0 leading-tight">
-                    A Full-Stack Developer specializing in the MERN stack and Python. I engineer containerized, production-ready applications that look sharp and run flawlessly.
+                    A Full-Stack Developer Based in Egypt, specializing in the MERN stack and Python. I engineer containerized, production-ready applications that look sharp and run flawlessly.
                   </p>
                 </div>
 
@@ -464,7 +464,7 @@ export default function App() {
                   </h2>
 
                   <p className="text-white font-sans text-xl md:text-2xl max-w-xl font-bold mb-0 leading-tight">
-                    A Full-Stack Developer specializing in the MERN stack and Python. I engineer containerized, production-ready applications that look sharp and run flawlessly.
+                    A Full-Stack Developer Based in Egypt, specializing in the MERN stack and Python. I engineer containerized, production-ready applications that look sharp and run flawlessly.
                   </p>
                 </motion.div>
 
