@@ -432,7 +432,7 @@ export default function App() {
                 >
                   <motion.img
                     style={{ y: imageY }}
-                    src={`${import.meta.env.BASE_URL}hero-bg.jpg`}
+                    src={`${import.meta.env.BASE_URL}hero-bg2.jpg`}
                     alt="Hero Background"
                     className="absolute -top-[25%] left-0 w-full h-[150%] object-cover object-center"
                   />
