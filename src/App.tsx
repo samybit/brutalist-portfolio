@@ -217,6 +217,9 @@ export default function App() {
         body.menu-open {
           --cursor-color: #00CC99 !important;
         }
+        .no-cursor, .no-cursor * {
+          cursor: none !important;
+        }
       `}</style>
 
       {isDesktop && (
@@ -832,10 +835,10 @@ export default function App() {
         {/* --- FOOTER --- */}
         <footer className="mt-32 border-t-8 border-foreground pt-8 pb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <p className="font-sans font-black uppercase text-lg md:text-xl max-w-md leading-tight">
-            "Anxiety is the dizziness of freedom." <br />
-            <span className="text-mainBrand">— Søren Kierkegaard</span>
+            "Simplicity is the ultimate sophistication." <br />
+            <span className="text-mainBrand">— Leonardo da Vinci</span>
           </p>
-          <div className="bg-foreground text-background px-6 py-3 font-heading font-black uppercase text-xl tracking-widest cursor-default hover:bg-mainBrand transition-colors">
+          <div className="bg-foreground text-background px-6 py-3 font-heading font-black uppercase text-xl tracking-widest cursor-default hover:bg-mainBrand transition-colors no-cursor">
             © {new Date().getFullYear()} SAMY
           </div>
         </footer>
