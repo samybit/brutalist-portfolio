@@ -221,6 +221,8 @@ export default function App() {
       : '/';
     window.history.replaceState({}, document.title, basePath);
     setActiveView("home");
+    // Scroll to the very top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // --- REUSABLE NAVBAR CONTENT (Used for both the static and cloned headers!) ---
