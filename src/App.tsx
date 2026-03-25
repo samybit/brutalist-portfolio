@@ -215,37 +215,47 @@ export default function App() {
     }
   };
 
-  const routeHome = () => {
+  const routeHome = (target?: "top" | "work") => {
     const basePath = window.location.pathname.startsWith('/brutalist-portfolio')
       ? '/brutalist-portfolio/'
       : '/';
     window.history.replaceState({}, document.title, basePath);
     setActiveView("home");
-    // Scroll to the very top
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Route the scroll based on the parameter passed
+    if (target === "top") {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (target === "work") {
+      // The timeout ensures the DOM has time to render the home view if we were on the About tab.
+      setTimeout(() => document.getElementById("work")?.scrollIntoView({ behavior: "smooth" }), 100);
+    }
   };
 
   // --- REUSABLE NAVBAR CONTENT (Used for both the static and cloned headers!) ---
   const renderNavContent = () => (
     <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 sm:gap-0">
       <h1
-        className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter hover:text-mainBrand transition-colors glitch-hover"
+        className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter hover:text-mainBrand transition-colors glitch-hover no-cursor"
         data-text="Samy B. Samir"
-        onClick={routeHome}
+        onClick={() => routeHome("top")} // Explicitly target the top
       >
         Samy B<span className="text-mainBrand">.</span> Samir
       </h1>
 
       <nav className="flex flex-wrap gap-4 sm:gap-6 font-sans font-bold uppercase text-base w-full sm:w-auto border-t-4 border-foreground pt-4 sm:border-none sm:pt-0">
         <button
-          onClick={routeHome}
+          onClick={() => routeHome("work")} // Explicitly target the work section
           className={`underline decoration-4 underline-offset-4 transition-colors hover:text-mainBrand ${activeView === "home" ? "text-mainBrand" : "text-foreground"}`}
         >
           Work
         </button>
 
         <button
-          onClick={() => setActiveView("about")}
+          onClick={() => {
+            setActiveView("about");
+            // Scroll to the top
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
           className={`underline decoration-4 underline-offset-4 transition-colors hover:text-mainBrand ${activeView === "about" ? "text-mainBrand" : "text-foreground"}`}
         >
           About
@@ -860,7 +870,7 @@ export default function App() {
               The coordinate you are looking for does not exist in this sector.
             </p>
             <Button
-              onClick={routeHome}
+              onClick={() => routeHome("top")}
               size="lg"
               className="h-16 px-10 text-xl font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-bgBrand hover:text-mainBrand"
             >
