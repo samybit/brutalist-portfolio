@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AnimatedCursor from "react-animated-cursor";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -57,6 +57,24 @@ export default function App() {
 
   // 2. Parallax effect specifically for the background image inside the mask.
   const imageY = useTransform(scrollY, [0, 600], [0, -150]);
+
+  // --- SMART Navbar REVEAL LOGIC ---
+  const [showStickyNav, setShowStickyNav] = useState(false);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() ?? 0;
+
+    if (latest < 200) {
+      // 1. If we are near the top, hide the sticky clone. The original static navbar is visible here!
+      setShowStickyNav(false);
+    } else if (latest < previous) {
+      // 2. If we scroll UP and we are deep in the page, slide the sticky clone down!
+      setShowStickyNav(true);
+    } else {
+      // 3. If we scroll DOWN, hide the sticky clone so it gets out of the way!
+      setShowStickyNav(false);
+    }
+  });
 
   // --- PAGE ROUTING STATE ---
   const [activeView, setActiveView] = useState<"home" | "about" | "404">(() => {
@@ -205,8 +223,60 @@ export default function App() {
     setActiveView("home");
   };
 
+  // --- REUSABLE NAVBAR CONTENT (Used for both the static and cloned headers!) ---
+  const renderNavContent = () => (
+    <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 sm:gap-0">
+      <h1
+        className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter hover:text-mainBrand transition-colors glitch-hover cursor-pointer"
+        data-text="Samy B. Samir"
+        onClick={routeHome}
+      >
+        Samy B<span className="text-mainBrand">.</span> Samir
+      </h1>
+
+      <nav className="flex flex-wrap gap-4 sm:gap-6 font-sans font-bold uppercase text-base w-full sm:w-auto border-t-4 border-foreground pt-4 sm:border-none sm:pt-0">
+        <button
+          onClick={routeHome}
+          className={`underline decoration-4 underline-offset-4 transition-colors hover:text-mainBrand ${activeView === "home" ? "text-mainBrand" : "text-foreground"}`}
+        >
+          Work
+        </button>
+
+        <button
+          onClick={() => setActiveView("about")}
+          className={`underline decoration-4 underline-offset-4 transition-colors hover:text-mainBrand ${activeView === "about" ? "text-mainBrand" : "text-foreground"}`}
+        >
+          About
+        </button>
+
+        <a
+          href="#contact"
+          onClick={(e) => {
+            if (activeView !== "home") {
+              e.preventDefault();
+              routeHome();
+              setTimeout(() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }), 100);
+            }
+          }}
+          className="hover:text-mainBrand underline decoration-4 underline-offset-4 transition-colors text-foreground"
+        >
+          Contact
+        </a>
+
+        <a
+          href="https://my-portfolio-seven-beta-98.vercel.app/"
+          target="_blank"
+          rel="noreferrer"
+          className="hover:text-mainBrand underline decoration-4 underline-offset-4 transition-colors text-foreground"
+        >
+          Archive
+        </a>
+      </nav>
+    </div>
+  );
+
   return (
-    <div className="min-h-screen bg-bgBrand text-foreground p-8 selection:bg-mainBrand selection:text-white overflow-x-hidden">
+    <div className="min-h-screen bg-bgBrand text-foreground selection:bg-mainBrand selection:text-white overflow-x-clip">
 
       {/* --- CSS VARIABLE INJECTION --- */}
       {/* browser instantly change the cursor color based on this math, entirely ignoring Javascript */}
@@ -355,59 +425,24 @@ export default function App() {
         </motion.div>
       )}
 
-      {/* --- RESPONSIVE NAVBAR --- */}
-      {/* HEADER FIX: Dynamically removing margin-bottom on the Home view so the picture seamlessly touches the border! */}
-      <header className={`flex flex-col sm:flex-row justify-between items-start sm:items-end border-b-8 border-foreground pb-6 gap-6 sm:gap-0 relative z-30 ${activeView === "home" ? "mb-0" : "mb-12 md:mb-20"}`}>
-        <h1
-          className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter hover:text-mainBrand transition-colors glitch-hover"
-          data-text="Samy B. Samir"
-          onClick={routeHome}
-        >
-          Samy B<span className="text-mainBrand">.</span> Samir
-        </h1>
-
-        <nav className="flex flex-wrap gap-4 sm:gap-6 font-sans font-bold uppercase text-base w-full sm:w-auto border-t-4 border-foreground pt-4 sm:border-none sm:pt-0">
-          <button
-            onClick={routeHome}
-            className={`underline decoration-4 underline-offset-4 transition-colors hover:text-mainBrand ${activeView === "home" ? "text-mainBrand" : "text-foreground"}`}
-          >
-            Work
-          </button>
-
-          <button
-            onClick={() => setActiveView("about")}
-            className={`underline decoration-4 underline-offset-4 transition-colors hover:text-mainBrand ${activeView === "about" ? "text-mainBrand" : "text-foreground"}`}
-          >
-            About
-          </button>
-
-          <a
-            href="#contact"
-            onClick={(e) => {
-              if (activeView !== "home") {
-                e.preventDefault();
-                routeHome();
-                setTimeout(() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }), 100);
-              }
-            }}
-            className="hover:text-mainBrand underline decoration-4 underline-offset-4 transition-colors text-foreground"
-          >
-            Contact
-          </a>
-
-          <a
-            href="https://my-portfolio-seven-beta-98.vercel.app/"
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-mainBrand underline decoration-4 underline-offset-4 transition-colors text-foreground"
-          >
-            Archive
-          </a>
-        </nav>
+      {/* --- 1. THE ORIGINAL STATIC NAVBAR --- */}
+      {/* Sits normally in the document and seamlessly scrolls away as you scroll down */}
+      <header className={`relative w-full px-8 pt-8 border-b-8 border-foreground pb-6 z-40 bg-bgBrand ${activeView === "home" ? "mb-0" : "mb-12 md:mb-20"}`}>
+        {renderNavContent()}
       </header>
 
-      {/* --- CONDITIONAL RENDERING LOGIC --- */}
-      <main className="max-w-6xl mx-auto">
+      {/* --- 2. THE CLONED SMART REVEAL NAVBAR --- */}
+      {/* Hidden above the screen. ONLY slides down when you scroll up from deep within the page! */}
+      <motion.header
+        initial={{ y: "-100%" }}
+        animate={{ y: showStickyNav ? "0%" : "-100%" }}
+        transition={{ duration: 0.35, ease: "easeInOut" }}
+        className="fixed top-0 left-0 w-full px-8 pt-8 border-b-8 border-foreground pb-6 z-50 bg-bgBrand shadow-2xl"
+      >
+        {renderNavContent()}
+      </motion.header>
+
+      <main className="max-w-6xl mx-auto px-8 pb-8">
 
         {/* ========================================= */}
         {/* HOME VIEW                                 */}
