@@ -227,7 +227,7 @@ export default function App() {
   const renderNavContent = () => (
     <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 sm:gap-0">
       <h1
-        className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter hover:text-mainBrand transition-colors glitch-hover cursor-pointer"
+        className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter hover:text-mainBrand transition-colors glitch-hover"
         data-text="Samy B. Samir"
         onClick={routeHome}
       >
