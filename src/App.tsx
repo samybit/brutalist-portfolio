@@ -244,7 +244,7 @@ export default function App() {
 
       <nav className="flex flex-wrap gap-4 sm:gap-6 font-sans font-bold uppercase text-base w-full sm:w-auto border-t-4 border-foreground pt-4 sm:border-none sm:pt-0">
         <button
-          onClick={() => routeHome("work")} // Explicitly target the work section
+          onClick={() => routeHome("top")}
           className={`underline decoration-4 underline-offset-4 transition-colors hover:text-mainBrand ${activeView === "home" ? "text-mainBrand" : "text-foreground"}`}
         >
           Work
