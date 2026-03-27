@@ -449,7 +449,7 @@ export default function App() {
         initial={{ y: "-100%" }}
         animate={{ y: showStickyNav ? "0%" : "-100%" }}
         transition={{ duration: 0.35, ease: "easeInOut" }}
-        className="fixed top-0 left-0 w-full px-8 pt-8 border-b-8 border-foreground pb-6 z-50 bg-bgBrand shadow-2xl"
+        className="fixed top-0 left-0 w-full px-8 pt-8 border-b-8 border-foreground pb-6 z-50 bg-bgBrand"
       >
         {renderNavContent()}
       </motion.header>
