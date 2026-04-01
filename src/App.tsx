@@ -92,6 +92,7 @@ export default function App() {
 
   // --- FORM INPUT CURSOR STATE ---
   const [isInputHover, setIsInputHover] = useState(false);
+  const [isMiddleClick, setIsMiddleClick] = useState(false);
 
   // --- MOBILE CURSOR FIX ---
   const [isDesktop, setIsDesktop] = useState(true);
@@ -134,6 +135,18 @@ export default function App() {
       if (target.closest('a, button, label')) setIsPointerHovering(false);
     };
 
+    const handleMouseDown = (e: MouseEvent) => {
+      if (e.button === 1) {
+        setIsMiddleClick(true);
+      }
+    };
+
+    const handleMouseUp = (e: MouseEvent) => {
+      if (e.button === 1) {
+        setIsMiddleClick(false);
+      }
+    };
+
     const handleMouseLeaveWindow = () => setIsMouseVisible(false);
     const handleMouseEnterWindow = () => setIsMouseVisible(true);
 
@@ -142,6 +155,8 @@ export default function App() {
     document.addEventListener("mouseout", handleMouseOut);
     document.addEventListener("mouseleave", handleMouseLeaveWindow);
     document.addEventListener("mouseenter", handleMouseEnterWindow);
+    window.addEventListener("mousedown", handleMouseDown);
+    window.addEventListener("mouseup", handleMouseUp);
 
     return () => {
       window.removeEventListener("mousemove", moveCursor);
@@ -149,6 +164,8 @@ export default function App() {
       document.removeEventListener("mouseout", handleMouseOut);
       document.removeEventListener("mouseleave", handleMouseLeaveWindow);
       document.removeEventListener("mouseenter", handleMouseEnterWindow);
+      window.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("mouseup", handleMouseUp);
     };
   }, [isDesktop, cursorX, cursorY, isMouseVisible]);
 
@@ -383,13 +400,20 @@ export default function App() {
         >
           <motion.div
             animate={{
-              width: isInputHover ? 4 : (isPointerHovering ? 30 : 20),
-              height: isInputHover ? 28 : (isPointerHovering ? 30 : 20),
-              backgroundColor: isInputHover ? "#00CC99" : "var(--cursor-color)",
-              outline: isInputHover ? "0px solid transparent" : "3px solid #000",
+              width: isMiddleClick ? 40 : isInputHover ? 4 : (isPointerHovering ? 30 : 20),
+              height: isMiddleClick ? 40 : isInputHover ? 28 : (isPointerHovering ? 30 : 20),
+              backgroundColor: isMiddleClick ? "#00CC99" : isInputHover ? "#00CC99" : "var(--cursor-color)",
+              outline: isMiddleClick ? "4px solid #000" : isInputHover ? "0px solid transparent" : "3px solid #000",
+              borderRadius: isMiddleClick ? "50%" : "0px",
+              scale: isMiddleClick ? [1, 1.2, 1] : 1,
             }}
-            transition={{ type: "spring", stiffness: 400, damping: 25, mass: 0.5 }}
-            className={`relative ${isInputHover ? 'animate-pulse-caret' : ''}`}
+            transition={{
+              type: "spring", stiffness: 400, damping: 25, mass: 0.5,
+              scale: isMiddleClick
+                ? { repeat: Infinity, duration: 0.8, ease: "easeInOut" }
+                : { type: "spring", stiffness: 400, damping: 25, mass: 0.5 }
+            }}
+            className={`relative ${isInputHover && !isMiddleClick ? 'animate-pulse-caret' : ''}`}
           />
         </motion.div>
       )}
