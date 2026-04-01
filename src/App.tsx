@@ -473,8 +473,7 @@ export default function App() {
             <div className="mb-32">
 
               {/* --- TEXT & PARALLAX BACKGROUND BLOCK --- */}
-              {/* natural pt-12 md:pt-20 to replace the missing header margin! */}
-              <div className="relative pt-12 md:pt-20 pb-16">
+              <div className="relative pt-6 md:pt-10 pb-8">
 
                 {/* 1. THE FULL-WIDTH IMAGE MASK */}
                 {/* identically sized (h-full) to the text mask so the clip paths sync pixel-perfectly */}
@@ -494,22 +493,21 @@ export default function App() {
 
                 {/* 2. LAYER A: THE BASE TEXT (Solid Black + Pink) */}
                 <div className="relative z-10 pointer-events-none">
-                  <h2 className="text-foreground text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-8 md:mb-10 break-words">
+                  <h2 className="text-foreground text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-6 md:mb-8 break-words">
                     Build. <br /> Ship. <br /> <span className="italic text-[#00CC99]">Scale.</span>
                   </h2>
 
                   <p className="text-foreground font-sans text-xl md:text-2xl max-w-xl font-bold mb-0 leading-tight">
-                    A Full-Stack Developer Based in Egypt, specializing in the MERN stack and Python. I engineer containerized, production-ready applications that look sharp and run flawlessly.
+                    A Full-Stack Developer Based in Egypt, specializing in the MERN stack and Python.<br />I engineer containerized, production-ready applications that look sharp and run flawlessly.
                   </p>
                 </div>
 
                 {/* 3. LAYER B: THE CLIPPED OVERLAY TEXT (Solid White + Pink) */}
-                {/* pt-12 md:pt-20 matches the parent container's padding to perfectly overlap LAYER A */}
                 <motion.div
                   style={{ clipPath }}
-                  className="absolute top-0 left-0 w-full h-full z-20 pointer-events-none pt-12 md:pt-20"
+                  className="absolute top-0 left-0 w-full h-full z-20 pointer-events-none pt-6 md:pt-10"
                 >
-                  <h2 className="text-white text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-8 md:mb-10 break-words">
+                  <h2 className="text-white text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-6 md:mb-8 break-words">
                     Build. <br /> Ship. <br /> <span className="italic text-mainBrand">Scale.</span>
                   </h2>
 
@@ -522,7 +520,7 @@ export default function App() {
               {/* --- END TEXT & PARALLAX BLOCK --- */}
 
               {/* 4. The Buttons */}
-              <div className="flex flex-wrap gap-4 relative z-30 mt-8">
+              <div className="flex flex-wrap gap-4 relative z-30 mt-4">
                 <Button
                   asChild
                   size="lg"
@@ -551,8 +549,8 @@ export default function App() {
                 <span className="mx-6">/// AVAILABLE · OPEN TO WORK · LET'S TALK</span>
                 <span className="mx-6">/// AVAILABLE · OPEN TO WORK · LET'S TALK</span>
                 <span className="mx-6">/// AVAILABLE · OPEN TO WORK · LET'S TALK</span>
-                <span className="mx-6">/// AVAILABLE · OPEN TO WORK · LET'S TALK</span>
-                <span className="mx-6">/// AVAILABLE · OPEN TO WORK · LET'S TALK</span>
+                {/* <span className="mx-6">/// AVAILABLE · OPEN TO WORK · LET'S TALK</span>
+                <span className="mx-6">/// AVAILABLE · OPEN TO WORK · LET'S TALK</span> */}
               </div>
             </div>
 
