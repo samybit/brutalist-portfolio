@@ -624,15 +624,25 @@ export default function App() {
                     I'm actively taking on new freelance clients and open to full-time roles. Drop a transmission below.
                   </p>
 
-                  <div className="space-y-4 font-sans font-black uppercase text-xl mt-12 mb-12">
-                    <div className="flex items-center gap-4">
-                      <div className="w-6 h-6 bg-mainBrand border-4 border-foreground"></div>
-                      <p>Based in Egypt</p>
+                  {/* --- STATUS BADGES --- */}
+                  <div className="flex flex-col sm:flex-row flex-wrap gap-4 mt-12 mb-12 cursor-default no-cursor">
+
+                    {/* Location Badge */}
+                    <div className="flex items-center gap-3 bg-mainBrand text-white px-5 py-3 border-4 border-foreground ">
+                      {/* Blinking status square */}
+                      <div className="w-3 h-3 bg-white border-2 border-white rounded-none animate-pulse"></div>
+                      <span className="font-sans font-black uppercase text-base md:text-lg tracking-wider">Based in Egypt</span>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <div className="w-6 h-6 bg-foreground border-4 border-foreground"></div>
-                      <p>Available Worldwide</p>
+
+                    {/* Availability Badge */}
+                    <div className="flex items-center gap-3 bg-white text-foreground px-5 py-3 border-4 border-foreground ">
+                      {/* Brutalist Globe SVG */}
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+                      </svg>
+                      <span className="font-sans font-black uppercase text-base md:text-lg tracking-wider">Available Worldwide</span>
                     </div>
+
                   </div>
 
                   <div className="flex flex-wrap gap-6 font-sans font-bold uppercase underline decoration-4 underline-offset-4 text-xl">
