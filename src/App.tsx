@@ -233,57 +233,60 @@ export default function App() {
 
   // --- REUSABLE NAVBAR CONTENT (Used for both the static and cloned headers!) ---
   const renderNavContent = () => (
-    <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 sm:gap-0">
-      <h1
-        className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter hover:text-mainBrand transition-colors glitch-hover no-cursor"
-        data-text="Samy B. Samir"
-        onClick={() => routeHome("top")} // Explicitly target the top
-      >
-        Samy B<span className="text-mainBrand">.</span> Samir
-      </h1>
-
-      <nav className="flex flex-wrap gap-4 sm:gap-6 font-sans font-bold uppercase text-base w-full sm:w-auto border-t-4 border-foreground pt-4 sm:border-none sm:pt-0">
-        <button
-          onClick={() => routeHome("top")}
-          className={`underline decoration-4 underline-offset-4 transition-colors hover:text-mainBrand ${activeView === "home" ? "text-mainBrand" : "text-foreground"}`}
+    // THE FIX: This wrapper exactly mirrors your <main> container's width!
+    <div className="max-w-6xl mx-auto px-8 w-full">
+      {/* THE FIX: We moved border-b-8 and pb-6 here, so the line is perfectly constrained */}
+      <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 sm:gap-0 border-b-8 border-foreground pb-6">
+        <h1
+          className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter hover:text-mainBrand transition-colors glitch-hover no-cursor"
+          data-text="Samy B. Samir"
+          onClick={() => routeHome("top")} // Explicitly target the top
         >
-          Work
-        </button>
+          Samy B<span className="text-mainBrand">.</span> Samir
+        </h1>
 
-        <button
-          onClick={() => {
-            setActiveView("about");
-            // Scroll to the top
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }}
-          className={`underline decoration-4 underline-offset-4 transition-colors hover:text-mainBrand ${activeView === "about" ? "text-mainBrand" : "text-foreground"}`}
-        >
-          About
-        </button>
+        <nav className="flex flex-wrap gap-4 sm:gap-6 font-sans font-bold uppercase text-base w-full sm:w-auto border-t-4 border-foreground pt-4 sm:border-none sm:pt-0">
+          <button
+            onClick={() => routeHome("top")}
+            className={`underline decoration-4 underline-offset-4 transition-colors hover:text-mainBrand ${activeView === "home" ? "text-mainBrand" : "text-foreground"}`}
+          >
+            Work
+          </button>
 
-        <a
-          href="#contact"
-          onClick={(e) => {
-            if (activeView !== "home") {
-              e.preventDefault();
-              routeHome();
-              setTimeout(() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }), 100);
-            }
-          }}
-          className="hover:text-mainBrand underline decoration-4 underline-offset-4 transition-colors text-foreground"
-        >
-          Contact
-        </a>
+          <button
+            onClick={() => {
+              setActiveView("about");
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+            className={`underline decoration-4 underline-offset-4 transition-colors hover:text-mainBrand ${activeView === "about" ? "text-mainBrand" : "text-foreground"}`}
+          >
+            About
+          </button>
 
-        <a
-          href="https://my-portfolio-seven-beta-98.vercel.app/"
-          target="_blank"
-          rel="noreferrer"
-          className="hover:text-mainBrand underline decoration-4 underline-offset-4 transition-colors text-foreground"
-        >
-          Archive
-        </a>
-      </nav>
+          <a
+            href="#contact"
+            onClick={(e) => {
+              if (activeView !== "home") {
+                e.preventDefault();
+                routeHome();
+                setTimeout(() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }), 100);
+              }
+            }}
+            className="hover:text-mainBrand underline decoration-4 underline-offset-4 transition-colors text-foreground"
+          >
+            Contact
+          </a>
+
+          <a
+            href="https://my-portfolio-seven-beta-98.vercel.app/"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-mainBrand underline decoration-4 underline-offset-4 transition-colors text-foreground"
+          >
+            Archive
+          </a>
+        </nav>
+      </div>
     </div>
   );
 
@@ -439,7 +442,7 @@ export default function App() {
 
       {/* --- 1. THE ORIGINAL STATIC NAVBAR --- */}
       {/* Sits normally in the document and seamlessly scrolls away as you scroll down */}
-      <header className={`relative w-full px-8 pt-8 border-b-8 border-foreground pb-6 z-40 bg-bgBrand ${activeView === "home" ? "mb-0" : "mb-12 md:mb-20"}`}>
+      <header className={`relative w-full pt-8 z-40 bg-bgBrand ${activeView === "home" ? "mb-0" : "mb-12 md:mb-20"}`}>
         {renderNavContent()}
       </header>
 
@@ -449,7 +452,7 @@ export default function App() {
         initial={{ y: "-100%" }}
         animate={{ y: showStickyNav ? "0%" : "-100%" }}
         transition={{ duration: 0.35, ease: "easeInOut" }}
-        className="fixed top-0 left-0 w-full px-8 pt-8 border-b-8 border-foreground pb-6 z-50 bg-bgBrand"
+        className="fixed top-0 left-0 w-full pt-8 z-50 bg-bgBrand"
       >
         {renderNavContent()}
       </motion.header>
