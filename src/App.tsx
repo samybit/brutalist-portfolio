@@ -571,7 +571,7 @@ export default function App() {
                     viewport={{ once: true, margin: "-50px" }}
                     transition={{ duration: 0.4, delay: index * 0.1 }}
                   >
-                    <Card className="h-full flex flex-col rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-2 hover:translate-y-2 transition-all bg-white duration-200 group">
+                    <Card className="relative h-full flex flex-col rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-2 hover:translate-y-2 transition-all bg-white duration-200 group">
                       <CardHeader className="border-b-4 border-foreground bg-accent/20 p-6">
                         <CardTitle className="text-2xl font-heading font-black uppercase group-hover:text-mainBrand transition-colors">
                           {project.title}
@@ -594,7 +594,7 @@ export default function App() {
                         </div>
                       </CardContent>
                       <CardFooter className="p-6 pt-6 mt-auto">
-                        <a href={project.link} target="_blank" rel="noreferrer" className="font-sans font-bold uppercase text-sm underline decoration-4 underline-offset-4 hover:text-mainBrand transition-colors">
+                        <a href={project.link} target="_blank" rel="noreferrer" className="font-sans font-bold uppercase text-sm underline decoration-4 underline-offset-4 hover:text-mainBrand transition-colors before:absolute before:inset-0">
                           View Project &rarr;
                         </a>
                       </CardFooter>
