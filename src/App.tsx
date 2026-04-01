@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import AnimatedCursor from "react-animated-cursor";
-import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValueEvent, useMotionValue } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -91,6 +90,9 @@ export default function App() {
     return "home";
   });
 
+  // --- FORM INPUT CURSOR STATE ---
+  const [isInputHover, setIsInputHover] = useState(false);
+
   // --- MOBILE CURSOR FIX ---
   const [isDesktop, setIsDesktop] = useState(true);
 
@@ -108,6 +110,47 @@ export default function App() {
     return () => mediaQuery.removeEventListener("change", checkPointer);
   }, []);
 
+  // --- CUSTOM BRUTALIST CURSOR LOGIC ---
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
+  const [isPointerHovering, setIsPointerHovering] = useState(false);
+  const [isMouseVisible, setIsMouseVisible] = useState(false);
+
+  useEffect(() => {
+    if (!isDesktop) return;
+
+    const moveCursor = (e: MouseEvent) => {
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
+      if (!isMouseVisible) setIsMouseVisible(true);
+    };
+
+    const handleMouseOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('a, button, label')) setIsPointerHovering(true);
+    };
+    const handleMouseOut = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('a, button, label')) setIsPointerHovering(false);
+    };
+
+    const handleMouseLeaveWindow = () => setIsMouseVisible(false);
+    const handleMouseEnterWindow = () => setIsMouseVisible(true);
+
+    window.addEventListener("mousemove", moveCursor);
+    document.addEventListener("mouseover", handleMouseOver);
+    document.addEventListener("mouseout", handleMouseOut);
+    document.addEventListener("mouseleave", handleMouseLeaveWindow);
+    document.addEventListener("mouseenter", handleMouseEnterWindow);
+
+    return () => {
+      window.removeEventListener("mousemove", moveCursor);
+      document.removeEventListener("mouseover", handleMouseOver);
+      document.removeEventListener("mouseout", handleMouseOut);
+      document.removeEventListener("mouseleave", handleMouseLeaveWindow);
+      document.removeEventListener("mouseenter", handleMouseEnterWindow);
+    };
+  }, [isDesktop, cursorX, cursorY, isMouseVisible]);
 
   // --- CUSTOM BRUTALIST CONTEXT MENU ---
   const [contextMenu, setContextMenu] = useState<{ show: boolean, x: number, y: number, target?: HTMLElement | null }>({ show: false, x: 0, y: 0 });
@@ -305,21 +348,50 @@ export default function App() {
         .no-cursor, .no-cursor * {
           cursor: none !important;
         }
+        @media (hover: hover) and (pointer: fine) {
+          /* Completely hides the native mouse globally to replace it with our tracker */
+          body, body * {
+            cursor: none !important;
+          }
+        }
+        @keyframes pulse-caret {
+          0%, 100% {
+            opacity: 1;
+            // box-shadow: 0 0 8px #00CC99, 0 0 16px #00CC99;
+          }
+          50% {
+            opacity: 0.3;
+            // box-shadow: 0 0 2px #00CC99, 0 0 4px #00CC99;
+          }
+        }
+        .animate-pulse-caret {
+          animation: pulse-caret 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
       `}</style>
 
       {isDesktop && (
-        <AnimatedCursor
-          innerSize={20}
-          outerSize={0}
-          color="255, 51, 102"
-          innerScale={1.5}
-          clickables={['a', 'input[type="text"]', 'input[type="email"]', 'button', 'textarea', 'label']}
-          innerStyle={{
-            borderRadius: '0',
-            outline: '3px solid #000', // Outline prevents the background color from bleeding through the anti-aliasing.
-            backgroundColor: 'var(--cursor-color)' // Locked to the CSS Variable
+        <motion.div
+          className="fixed top-0 left-0 pointer-events-none z-[9999]"
+          style={{
+            x: cursorX,
+            y: cursorY,
+            translateX: "-50%",
+            translateY: "-50%",
+            opacity: isMouseVisible ? 1 : 0,
           }}
-        />
+          transition={{ opacity: { duration: 0.2 } }}
+        >
+          <motion.div
+            animate={{
+              width: isInputHover ? 4 : (isPointerHovering ? 30 : 20),
+              height: isInputHover ? 28 : (isPointerHovering ? 30 : 20),
+              backgroundColor: isInputHover ? "#00CC99" : "var(--cursor-color)",
+              outline: isInputHover ? "0px solid transparent" : "3px solid #000",
+            }}
+            transition={{ type: "spring", stiffness: 400, damping: 25, mass: 0.5 }}
+            className={`relative ${isInputHover ? 'animate-pulse-caret' : ''}`}
+          />
+        </motion.div>
       )}
 
       {/* --- BRUTALIST CONTEXT MENU --- */}
@@ -668,8 +740,10 @@ export default function App() {
                     <Input
                       id="name"
                       name="name"
+                      onMouseEnter={() => setIsInputHover(true)}
+                      onMouseLeave={() => setIsInputHover(false)}
                       placeholder="JOHN DOE"
-                      className={`rounded-none border-4 h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:bg-accent/10 bg-bgBrand transition-colors ${errors.name ? 'border-mainBrand focus-visible:border-mainBrand' : 'border-foreground focus-visible:border-mainBrand'}`}
+                      className={`contact-form-input rounded-none border-4 h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:bg-accent/10 bg-bgBrand transition-colors ${errors.name ? 'border-mainBrand focus-visible:border-mainBrand' : 'border-foreground focus-visible:border-mainBrand'}`}
                     />
                     {errors.name && <p className="text-mainBrand font-bold font-sans uppercase text-sm">{errors.name}</p>}
                   </div>
@@ -680,8 +754,10 @@ export default function App() {
                       id="email"
                       name="email"
                       type="email"
+                      onMouseEnter={() => setIsInputHover(true)}
+                      onMouseLeave={() => setIsInputHover(false)}
                       placeholder="JOHN@DOE.COM"
-                      className={`rounded-none border-4 h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:bg-accent/10 bg-bgBrand transition-colors ${errors.email ? 'border-mainBrand focus-visible:border-mainBrand' : 'border-foreground focus-visible:border-mainBrand'}`}
+                      className={`contact-form-input rounded-none border-4 h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:bg-accent/10 bg-bgBrand transition-colors ${errors.email ? 'border-mainBrand focus-visible:border-mainBrand' : 'border-foreground focus-visible:border-mainBrand'}`}
                     />
                     {errors.email && <p className="text-mainBrand font-bold font-sans uppercase text-sm">{errors.email}</p>}
                   </div>
@@ -691,8 +767,10 @@ export default function App() {
                     <Textarea
                       id="message"
                       name="message"
+                      onMouseEnter={() => setIsInputHover(true)}
+                      onMouseLeave={() => setIsInputHover(false)}
                       placeholder="TELL ME ABOUT YOUR PROJECT..."
-                      className={`rounded-none border-4 min-h-[200px] text-xl font-bold font-sans focus-visible:ring-0 focus-visible:bg-accent/10 bg-bgBrand resize-none transition-colors p-4 ${errors.message ? 'border-mainBrand focus-visible:border-mainBrand' : 'border-foreground focus-visible:border-mainBrand'}`}
+                      className={`contact-form-input rounded-none border-4 min-h-[200px] text-xl font-bold font-sans focus-visible:ring-0 focus-visible:bg-accent/10 bg-bgBrand resize-none transition-colors p-4 ${errors.message ? 'border-mainBrand focus-visible:border-mainBrand' : 'border-foreground focus-visible:border-mainBrand'}`}
                     />
                     {errors.message && <p className="text-mainBrand font-bold font-sans uppercase text-sm">{errors.message}</p>}
                   </div>
