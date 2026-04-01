@@ -53,7 +53,7 @@ export default function App() {
 
   // 1. Animates a clipping mask from the bottom up. 
   // At 0 scroll, 0% is hidden. At 600px scroll, 100% is hidden (cut).
-  const clipPath = useTransform(scrollY, [0, 600], ["inset(0% 0% 0% 0%)", "inset(0% 0% 115% 0%)"]);
+  const clipPath = useTransform(scrollY, [0, 850], ["inset(0% 0% 0% 0%)", "inset(0% 0% 115% 0%)"]);
 
   // 2. Parallax effect specifically for the background image inside the mask.
   const imageY = useTransform(scrollY, [0, 600], [0, -150]);
@@ -491,7 +491,7 @@ export default function App() {
 
                 {/* 2. LAYER A: THE BASE TEXT (Solid Black + Pink) */}
                 <div className="relative z-10 pointer-events-none">
-                  <h2 className="text-foreground text-6xl sm:text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-8 md:mb-10 break-words">
+                  <h2 className="text-foreground text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-8 md:mb-10 break-words">
                     Build. <br /> Ship. <br /> <span className="italic text-[#00CC99]">Scale.</span>
                   </h2>
 
@@ -506,12 +506,12 @@ export default function App() {
                   style={{ clipPath }}
                   className="absolute top-0 left-0 w-full h-full z-20 pointer-events-none pt-12 md:pt-20"
                 >
-                  <h2 className="text-white text-6xl sm:text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-8 md:mb-10 break-words">
+                  <h2 className="text-white text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-8 md:mb-10 break-words">
                     Build. <br /> Ship. <br /> <span className="italic text-mainBrand">Scale.</span>
                   </h2>
 
                   <p className="text-white font-sans text-xl md:text-2xl max-w-xl font-bold mb-0 leading-tight">
-                    A Full-Stack Developer Based in Egypt, specializing in the MERN stack and Python. I engineer containerized, production-ready applications that look sharp and run flawlessly.
+                    A Full-Stack Developer Based in Egypt, specializing in the MERN stack and Python.<br />I engineer containerized, production-ready applications that look sharp and run flawlessly.
                   </p>
                 </motion.div>
 
@@ -723,9 +723,9 @@ export default function App() {
                 </h2>
 
                 <div className="font-sans text-xl md:text-2xl font-bold space-y-6 max-w-2xl border-l-8 border-mainBrand pl-6">
-                  <p>
+                  {/* <p>
                     I am a Full Stack Developer based in Egypt, bridging the gap between modern JavaScript interfaces and powerful Python backends.
-                  </p>
+                  </p> */}
                   <p>
                     My journey began with Python automation and scripting, building tools to scrape data and automate tasks. I then expanded into full-stack development, mastering the MERN stack to engineer dynamic applications.
                   </p>
