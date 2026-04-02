@@ -52,10 +52,18 @@ export default function App() {
 
   // 1. Animates a clipping mask from the bottom up. 
   // At 0 scroll, 0% is hidden. At 600px scroll, 100% is hidden (cut).
-  const clipPath = useTransform(scrollY, [0, 850], ["inset(0% 0% 0% 0%)", "inset(0% 0% 115% 0%)"]);
+  const clipPath = useTransform(scrollY, [0, 450], ["inset(0% 0% 0% 0%)", "inset(0% 0% 115% 0%)"]);
 
   // 2. Parallax effect specifically for the background image inside the mask.
   const imageY = useTransform(scrollY, [0, 600], [0, -150]);
+
+  // --- PARALLAX TEXT REVEAL ---
+  // Word 1 fades in from 0px to 150px scrolled
+  const buildOpacity = useTransform(scrollY, [0, 0], [0.15, 1]);
+  // Word 2 fades in from 150px to 300px scrolled
+  const shipOpacity = useTransform(scrollY, [50, 100], [0.15, 1]);
+  // Word 3 fades in from 300px to 450px scrolled
+  const scaleOpacity = useTransform(scrollY, [50, 100], [0.15, 1]);
 
   // --- SMART Navbar REVEAL LOGIC ---
   const [showStickyNav, setShowStickyNav] = useState(false);
@@ -589,8 +597,11 @@ export default function App() {
 
                 {/* 2. LAYER A: THE BASE TEXT (Solid Black + Pink) */}
                 <div className="relative z-10 pointer-events-none">
-                  <h2 className="text-foreground text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-6 md:mb-8 break-words">
-                    Build. <br /> Ship. <br /> <span className="italic text-[#00CC99]">Scale.</span>
+                  {/* Kept the layout tight, but added motion.spans to control opacity */}
+                  <h2 className="text-foreground text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-6 md:mb-8 break-words flex flex-col">
+                    <motion.span style={{ opacity: buildOpacity }}>Build.</motion.span>
+                    <motion.span style={{ opacity: shipOpacity }}>Ship.</motion.span>
+                    <motion.span style={{ opacity: scaleOpacity }} className="italic text-[#00CC99]">Scale.</motion.span>
                   </h2>
 
                   <p className="text-foreground font-sans text-xl md:text-2xl max-w-xl font-bold mb-0 leading-tight">
@@ -603,8 +614,10 @@ export default function App() {
                   style={{ clipPath }}
                   className="absolute top-0 left-0 w-full h-full z-20 pointer-events-none pt-6 md:pt-10"
                 >
-                  <h2 className="text-white text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-6 md:mb-8 break-words">
-                    Build. <br /> Ship. <br /> <span className="italic text-mainBrand">Scale.</span>
+                  <h2 className="text-white text-7xl md:text-9xl font-heading font-black uppercase leading-[0.85] mb-6 md:mb-8 break-words flex flex-col">
+                    <motion.span style={{ opacity: buildOpacity }}>Build.</motion.span>
+                    <motion.span style={{ opacity: shipOpacity }}>Ship.</motion.span>
+                    <motion.span style={{ opacity: scaleOpacity }} className="italic text-mainBrand">Scale.</motion.span>
                   </h2>
 
                   <p className="text-white font-sans text-xl md:text-2xl max-w-xl font-bold mb-0 leading-tight">
