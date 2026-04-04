@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { useTheme } from "@/components/theme-provider";
 
 const projects = [
   {
@@ -47,6 +48,8 @@ const projects = [
 ];
 
 export default function App() {
+  const { theme, setTheme } = useTheme();
+
   // --- FRAMER MOTION CLIP-PATH SETUP ---
   const { scrollY } = useScroll();
 
@@ -61,9 +64,9 @@ export default function App() {
   // Word 1 fades in from 0px to 150px scrolled
   const buildOpacity = useTransform(scrollY, [0, 0], [0.15, 1]);
   // Word 2 fades in from 150px to 300px scrolled
-  const shipOpacity = useTransform(scrollY, [50, 100], [0.15, 1]);
+  const shipOpacity = useTransform(scrollY, [0, 0], [0.15, 1]);
   // Word 3 fades in from 300px to 450px scrolled
-  const scaleOpacity = useTransform(scrollY, [50, 100], [0.15, 1]);
+  const scaleOpacity = useTransform(scrollY, [0, 0], [0.15, 1]);
 
   // --- SMART Navbar REVEAL LOGIC ---
   const [showStickyNav, setShowStickyNav] = useState(false);
@@ -313,7 +316,7 @@ export default function App() {
           Samy B<span className="text-mainBrand">.</span> Samir
         </h1>
 
-        <nav className="flex flex-wrap gap-4 sm:gap-6 font-sans font-bold uppercase text-base w-full sm:w-auto border-t-4 border-foreground pt-4 sm:border-none sm:pt-0">
+        <nav className="flex flex-wrap items-center gap-4 sm:gap-6 font-sans font-bold uppercase text-base w-full sm:w-auto border-t-4 border-foreground pt-4 sm:border-none sm:pt-0">
           <button
             onClick={() => routeHome("top")}
             className={`underline decoration-4 underline-offset-4 transition-colors hover:text-mainBrand ${activeView === "home" ? "text-mainBrand" : "text-foreground"}`}
@@ -353,13 +356,21 @@ export default function App() {
           >
             Archive
           </a>
+
+          {/* THEME TOGGLE */}
+          <button
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="font-mallory ml-2 border-4 border-foreground px-3 py-1 text-sm tracking-widest hover:bg-foreground hover:text-background transition-colors"
+          >
+            {theme === "dark" ? "LIGHT" : "DARK"}
+          </button>
         </nav>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-bgBrand text-foreground selection:bg-mainBrand selection:text-white overflow-x-clip">
+    <div className="min-h-screen bg-background text-foreground selection:bg-mainBrand selection:text-white overflow-x-clip">
 
       {/* --- CSS VARIABLE INJECTION --- */}
       {/* browser instantly change the cursor color based on this math, entirely ignoring Javascript */}
@@ -432,7 +443,7 @@ export default function App() {
           initial={{ opacity: 0, scale: 0.9, transformOrigin: "top left" }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.1 }}
-          className="fixed z-[100] bg-white border-4 border-foreground shadow-brutal w-64 flex flex-col font-sans font-black uppercase text-sm"
+          className="fixed z-[100] bg-card border-4 border-foreground shadow-brutal w-64 flex flex-col font-sans font-black uppercase text-sm"
           style={{ top: contextMenu.y, left: contextMenu.x }}
         >
           {/* Menu Header */}
@@ -537,7 +548,7 @@ export default function App() {
 
           <button
             onClick={() => setContextMenu({ show: false, x: 0, y: 0 })}
-            className="px-4 py-3 text-left hover:bg-bgBrand hover:text-mainBrand transition-colors w-full flex justify-between group text-foreground/50"
+            className="px-4 py-3 text-left hover:bg-background hover:text-mainBrand transition-colors w-full flex justify-between group text-foreground/50"
           >
             <span>Abort Operation</span> <span className="opacity-0 group-hover:opacity-100 text-mainBrand">X</span>
           </button>
@@ -546,7 +557,7 @@ export default function App() {
 
       {/* --- 1. THE ORIGINAL STATIC NAVBAR --- */}
       {/* Sits normally in the document and seamlessly scrolls away as you scroll down */}
-      <header className={`relative w-full pt-8 z-40 bg-bgBrand ${activeView === "home" ? "mb-0" : "mb-12 md:mb-20"}`}>
+      <header className={`relative w-full pt-8 z-40 bg-background ${activeView === "home" ? "mb-0" : "mb-12 md:mb-20"}`}>
         {renderNavContent()}
       </header>
 
@@ -556,7 +567,7 @@ export default function App() {
         initial={{ y: "-100%" }}
         animate={{ y: showStickyNav ? "0%" : "-100%" }}
         transition={{ duration: 0.35, ease: "easeInOut" }}
-        className="fixed top-0 left-0 w-full pt-8 z-50 bg-bgBrand"
+        className="fixed top-0 left-0 w-full pt-8 z-50 bg-background"
       >
         {renderNavContent()}
       </motion.header>
@@ -633,7 +644,7 @@ export default function App() {
                 <Button
                   asChild
                   size="lg"
-                  className="h-12 px-6 text-base font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-bgBrand hover:text-mainBrand"
+                  className="h-12 px-6 text-base font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-background hover:text-mainBrand"
                 >
                   <a href="#contact">LET'S TALK</a>
                 </Button>
@@ -642,7 +653,7 @@ export default function App() {
                   asChild
                   size="lg"
                   variant="outline"
-                  className="h-12 px-6 text-base font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-bgBrand hover:text-mainBrand"
+                  className="h-12 px-6 text-base font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-background hover:text-mainBrand"
                 >
                   <a href={`${import.meta.env.BASE_URL}cv.pdf`} download="Samy_CV.pdf">
                     DOWNLOAD CV
@@ -680,7 +691,7 @@ export default function App() {
                     viewport={{ once: true, margin: "-50px" }}
                     transition={{ duration: 0.4, delay: index * 0.1 }}
                   >
-                    <Card className="relative h-full flex flex-col rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-2 hover:translate-y-2 transition-all bg-white duration-200 group">
+                    <Card className="relative h-full flex flex-col rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-2 hover:translate-y-2 transition-all bg-card duration-200 group">
                       <CardHeader className="border-b-4 border-foreground bg-accent/20 p-6">
                         <CardTitle className="text-2xl font-heading font-black uppercase group-hover:text-mainBrand transition-colors">
                           {project.title}
@@ -695,7 +706,7 @@ export default function App() {
                             <Badge
                               key={i}
                               variant="outline"
-                              className="rounded-none border-2 border-foreground font-sans font-bold uppercase text-xs px-3 py-1 bg-white"
+                              className="rounded-none border-2 border-foreground font-sans font-bold uppercase text-xs px-3 py-1 bg-card"
                             >
                               {tech}
                             </Badge>
@@ -745,7 +756,7 @@ export default function App() {
                     </div>
 
                     {/* Availability Badge */}
-                    <div className="flex items-center gap-3 bg-white text-foreground px-5 py-3 border-4 border-foreground ">
+                    <div className="flex items-center gap-3 bg-card text-foreground px-5 py-3 border-4 border-foreground ">
                       {/* Brutalist Globe SVG */}
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
@@ -768,7 +779,7 @@ export default function App() {
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="bg-white border-8 border-foreground p-8 md:p-12 shadow-brutal-lg flex flex-col gap-6"
+                  className="bg-card border-8 border-foreground p-8 md:p-12 shadow-brutal-lg flex flex-col gap-6"
                   onSubmit={onSubmit}
                   noValidate
                 >
@@ -780,7 +791,7 @@ export default function App() {
                       onMouseEnter={() => setIsInputHover(true)}
                       onMouseLeave={() => setIsInputHover(false)}
                       placeholder="JOHN DOE"
-                      className={`contact-form-input rounded-none border-4 h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:bg-accent/10 bg-bgBrand transition-colors ${errors.name ? 'border-mainBrand focus-visible:border-mainBrand' : 'border-foreground focus-visible:border-mainBrand'}`}
+                      className={`contact-form-input rounded-none border-4 h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:bg-accent/10 bg-background transition-colors ${errors.name ? 'border-mainBrand focus-visible:border-mainBrand' : 'border-foreground focus-visible:border-mainBrand'}`}
                     />
                     {errors.name && <p className="text-mainBrand font-bold font-sans uppercase text-sm">{errors.name}</p>}
                   </div>
@@ -794,7 +805,7 @@ export default function App() {
                       onMouseEnter={() => setIsInputHover(true)}
                       onMouseLeave={() => setIsInputHover(false)}
                       placeholder="JOHN@DOE.COM"
-                      className={`contact-form-input rounded-none border-4 h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:bg-accent/10 bg-bgBrand transition-colors ${errors.email ? 'border-mainBrand focus-visible:border-mainBrand' : 'border-foreground focus-visible:border-mainBrand'}`}
+                      className={`contact-form-input rounded-none border-4 h-16 text-xl font-bold font-sans focus-visible:ring-0 focus-visible:bg-accent/10 bg-background transition-colors ${errors.email ? 'border-mainBrand focus-visible:border-mainBrand' : 'border-foreground focus-visible:border-mainBrand'}`}
                     />
                     {errors.email && <p className="text-mainBrand font-bold font-sans uppercase text-sm">{errors.email}</p>}
                   </div>
@@ -807,7 +818,7 @@ export default function App() {
                       onMouseEnter={() => setIsInputHover(true)}
                       onMouseLeave={() => setIsInputHover(false)}
                       placeholder="TELL ME ABOUT YOUR PROJECT..."
-                      className={`contact-form-input rounded-none border-4 min-h-[200px] text-xl font-bold font-sans focus-visible:ring-0 focus-visible:bg-accent/10 bg-bgBrand resize-none transition-colors p-4 ${errors.message ? 'border-mainBrand focus-visible:border-mainBrand' : 'border-foreground focus-visible:border-mainBrand'}`}
+                      className={`contact-form-input rounded-none border-4 min-h-[200px] text-xl font-bold font-sans focus-visible:ring-0 focus-visible:bg-accent/10 bg-background resize-none transition-colors p-4 ${errors.message ? 'border-mainBrand focus-visible:border-mainBrand' : 'border-foreground focus-visible:border-mainBrand'}`}
                     />
                     {errors.message && <p className="text-mainBrand font-bold font-sans uppercase text-sm">{errors.message}</p>}
                   </div>
@@ -816,7 +827,7 @@ export default function App() {
                     type="submit"
                     size="lg"
                     disabled={formStatus === "submitting"}
-                    className="w-full h-20 mt-6 text-lg sm:text-xl md:text-2xl font-black rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-bgBrand hover:text-mainBrand disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full h-20 mt-6 text-lg sm:text-xl md:text-2xl font-black rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-background hover:text-mainBrand disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {formStatus === "idle" && "SEND TRANSMISSION"}
                     {formStatus === "submitting" && "SENDING..."}
@@ -871,13 +882,13 @@ export default function App() {
                   <h3 className="text-3xl font-heading font-black uppercase tracking-tight border-b-4 border-foreground pb-2 mb-6">
                     Education
                   </h3>
-                  <div className="bg-white border-4 border-foreground shadow-brutal-sm p-6">
+                  <div className="bg-card border-4 border-foreground shadow-brutal-sm p-6">
                     <div className="flex justify-between items-start mb-4 flex-col sm:flex-row gap-2 sm:gap-0">
                       <div>
                         <h5 className="font-black font-sans uppercase text-xl">Bachelor of Commerce (B.B.A.)</h5>
                         <p className="font-sans font-bold text-mainBrand">Ain Shams University</p>
                       </div>
-                      <Badge className="rounded-none border-2 border-foreground bg-bgBrand text-foreground font-black text-sm uppercase">2019 - 2023</Badge>
+                      <Badge className="rounded-none border-2 border-foreground bg-background text-foreground font-black text-sm uppercase">2019 - 2023</Badge>
                     </div>
                     <p className="font-sans font-medium text-base">
                       Developed a foundation in logic, problem-solving, and a strategic mindset for system architecture. This allows me to translate business requirements into efficient, scalable technical solutions.
@@ -891,15 +902,15 @@ export default function App() {
                     Certifications
                   </h3>
                   <div className="space-y-4">
-                    <div className="bg-white border-4 border-foreground p-4 flex items-center justify-between hover:translate-x-1 hover:-translate-y-1 transition-transform shadow-brutal-sm">
+                    <div className="bg-card border-4 border-foreground p-4 flex items-center justify-between hover:translate-x-1 hover:-translate-y-1 transition-transform shadow-brutal-sm">
                       <span className="font-black font-sans uppercase text-lg">MERN Stack & AI</span>
                       <span className="font-black font-sans text-mainBrand uppercase">ITI</span>
                     </div>
-                    <div className="bg-white border-4 border-foreground p-4 flex items-center justify-between hover:translate-x-1 hover:-translate-y-1 transition-transform shadow-brutal-sm">
+                    <div className="bg-card border-4 border-foreground p-4 flex items-center justify-between hover:translate-x-1 hover:-translate-y-1 transition-transform shadow-brutal-sm">
                       <span className="font-black font-sans uppercase text-lg">Database Fundamentals</span>
                       <span className="font-black font-sans text-mainBrand uppercase">egFWD</span>
                     </div>
-                    <div className="bg-white border-4 border-foreground p-4 flex items-center justify-between hover:translate-x-1 hover:-translate-y-1 transition-transform shadow-brutal-sm">
+                    <div className="bg-card border-4 border-foreground p-4 flex items-center justify-between hover:translate-x-1 hover:-translate-y-1 transition-transform shadow-brutal-sm">
                       <span className="font-black font-sans uppercase text-lg">CS50x</span>
                       <span className="font-black font-sans text-mainBrand uppercase">Harvard</span>
                     </div>
@@ -919,49 +930,49 @@ export default function App() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Frontend */}
-                <Card className="rounded-none border-4 border-foreground shadow-brutal bg-white">
+                <Card className="rounded-none border-4 border-foreground shadow-brutal bg-card">
                   <CardHeader className="border-b-4 border-foreground bg-mainBrand text-white p-4">
                     <CardTitle className="font-heading font-black uppercase text-2xl">Frontend & UI</CardTitle>
                   </CardHeader>
                   <CardContent className="p-6 flex flex-wrap gap-3">
                     {["React.js", "Angular", "JavaScript (ES6+)", "HTML5 & CSS3", "Bootstrap 5", "Figma"].map(skill => (
-                      <Badge key={skill} variant="outline" className="rounded-none border-2 border-foreground font-sans font-bold uppercase text-sm px-3 py-1 bg-bgBrand">{skill}</Badge>
+                      <Badge key={skill} variant="outline" className="rounded-none border-2 border-foreground font-sans font-bold uppercase text-sm px-3 py-1 bg-background">{skill}</Badge>
                     ))}
                   </CardContent>
                 </Card>
 
                 {/* Backend */}
-                <Card className="rounded-none border-4 border-foreground shadow-brutal bg-white">
+                <Card className="rounded-none border-4 border-foreground shadow-brutal bg-card">
                   <CardHeader className="p-4">
                     <CardTitle className="font-heading font-black uppercase text-2xl text-mainBrand">Backend & Database</CardTitle>
                   </CardHeader>
                   <CardContent className="p-6 flex flex-wrap gap-3">
                     {["Python", "Node.js", "Express.js", "Flask", "MongoDB", "WTForms"].map(skill => (
-                      <Badge key={skill} variant="outline" className="rounded-none border-2 border-foreground font-sans font-bold uppercase text-sm px-3 py-1 bg-bgBrand">{skill}</Badge>
+                      <Badge key={skill} variant="outline" className="rounded-none border-2 border-foreground font-sans font-bold uppercase text-sm px-3 py-1 bg-background">{skill}</Badge>
                     ))}
                   </CardContent>
                 </Card>
 
                 {/* DevOps */}
-                <Card className="rounded-none border-4 border-foreground shadow-brutal bg-white">
+                <Card className="rounded-none border-4 border-foreground shadow-brutal bg-card">
                   <CardHeader className="p-4">
                     <CardTitle className="font-heading font-black uppercase text-2xl text-mainBrand">DevOps & Tools</CardTitle>
                   </CardHeader>
                   <CardContent className="p-6 flex flex-wrap gap-3">
                     {["Docker", "Git / GitHub", "Linux OS", "Nexus Repo Manager"].map(skill => (
-                      <Badge key={skill} variant="outline" className="rounded-none border-2 border-foreground font-sans font-bold uppercase text-sm px-3 py-1 bg-bgBrand">{skill}</Badge>
+                      <Badge key={skill} variant="outline" className="rounded-none border-2 border-foreground font-sans font-bold uppercase text-sm px-3 py-1 bg-background">{skill}</Badge>
                     ))}
                   </CardContent>
                 </Card>
 
                 {/* Scripting */}
-                <Card className="rounded-none border-4 border-foreground shadow-brutal bg-white">
+                <Card className="rounded-none border-4 border-foreground shadow-brutal bg-card">
                   <CardHeader className="border-b-4 border-foreground bg-mainBrand text-white p-4">
                     <CardTitle className="font-heading font-black uppercase text-2xl">Automation & Scripting</CardTitle>
                   </CardHeader>
                   <CardContent className="p-6 flex flex-wrap gap-3">
                     {["Selenium", "BeautifulSoup", "Tkinter (GUI)", "REST APIs"].map(skill => (
-                      <Badge key={skill} variant="outline" className="rounded-none border-2 border-foreground font-sans font-bold uppercase text-sm px-3 py-1 bg-bgBrand">{skill}</Badge>
+                      <Badge key={skill} variant="outline" className="rounded-none border-2 border-foreground font-sans font-bold uppercase text-sm px-3 py-1 bg-background">{skill}</Badge>
                     ))}
                   </CardContent>
                 </Card>
@@ -998,7 +1009,7 @@ export default function App() {
             <Button
               onClick={() => routeHome("top")}
               size="lg"
-              className="h-16 px-10 text-xl font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-bgBrand hover:text-mainBrand"
+              className="h-16 px-10 text-xl font-bold rounded-none border-4 border-foreground shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all bg-mainBrand text-white hover:bg-background hover:text-mainBrand"
             >
               RETURN TO BASE
             </Button>
