@@ -304,9 +304,9 @@ export default function App() {
 
   // --- REUSABLE NAVBAR CONTENT (Used for both the static and cloned headers!) ---
   const renderNavContent = () => (
-    // THE FIX: This wrapper exactly mirrors your <main> container's width!
+    // This wrapper exactly mirrors your <main> container's width
     <div className="max-w-6xl mx-auto px-8 w-full">
-      {/* THE FIX: We moved border-b-8 and pb-6 here, so the line is perfectly constrained */}
+      {/* Moved border-b-8 and pb-6 here, so the line is perfectly constrained */}
       <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 sm:gap-0 border-b-8 border-foreground pb-6">
         <h1
           className="text-5xl md:text-4xl font-heading font-black uppercase leading-none tracking-tighter hover:text-mainBrand transition-colors glitch-hover no-cursor"
